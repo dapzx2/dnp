@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Journey of dnp ^^</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Courier+Prime:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Quicksand:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'midnight': '#0f2027',
+                        'midnight-dark': '#0a0f14',
+                        'paper': '#faf8f5',
+                        'gold': '#d4af37',
+                        'gold-light': '#f0d875',
+                        'gold-dim': '#a68a2a',
+                        'rose': '#ff6b9d',
+                        'violet': '#7c3aed',
+                        'cyan': '#22d3ee',
+                    },
+                    fontFamily: {
+                        'playfair': ['Playfair Display', 'serif'],
+                        'courier': ['Courier Prime', 'monospace'],
+                        'caveat': ['Caveat', 'cursive'],
+                        'quicksand': ['Quicksand', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    backdropBlur: {
+                        'xs': '2px',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-delay': 'float 6s ease-in-out 2s infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'shimmer': 'shimmer 2s linear infinite',
+                        'pulse-slow': 'pulse 3s ease-in-out infinite',
+                        'wiggle': 'wiggle 1s ease-in-out infinite',
+                        'shake': 'shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97)',
+                        'gradient': 'gradient 8s ease infinite',
+                        'slide-up': 'slideUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+                        'slide-in': 'slideIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+                        'scale-in': 'scaleIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+                        'scale-out': 'scaleOut 0.2s cubic-bezier(0.4, 0, 1, 1) forwards',
+                        'fade-in': 'fadeIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 20px rgba(212,175,55,0.3)' },
+                            '100%': { boxShadow: '0 0 40px rgba(212,175,55,0.6), 0 0 80px rgba(212,175,55,0.3)' },
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-200% 0' },
+                            '100%': { backgroundPosition: '200% 0' },
+                        },
+                        wiggle: {
+                            '0%, 100%': { transform: 'rotate(-5deg)' },
+                            '50%': { transform: 'rotate(5deg)' },
+                        },
+                        shake: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '10%, 30%, 50%, 70%, 90%': { transform: 'translateX(-4px)' },
+                            '20%, 40%, 60%, 80%': { transform: 'translateX(4px)' },
+                        },
+                        gradient: {
+                            '0%, 100%': { backgroundPosition: '0% 50%' },
+                            '50%': { backgroundPosition: '100% 50%' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        slideIn: {
+                            '0%': { opacity: '0', transform: 'translateX(-20px)' },
+                            '100%': { opacity: '1', transform: 'translateX(0)' },
+                        },
+                        scaleIn: {
+                            '0%': { opacity: '0', transform: 'scale(0.95) translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'scale(1) translateY(0)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        scaleOut: {
+                            '0%': {
+                                opacity: '1',
+                                transform: 'scale(1)',
+                                transformOrigin: 'bottom right',
+                                borderRadius: '1.5rem'
+                            },
+                            '80%': {
+                                opacity: '1',
+                                transform: 'scale(0.8) translateX(-20px) translateY(5px)',
+                                borderRadius: '1.2rem'
+                            },
+                            '100%': {
+                                opacity: '0',
+                                transform: 'scale(0.7) translateX(-30px)',
+                                transformOrigin: 'bottom right',
+                                borderRadius: '1rem'
+                            },
+                        },
+                    },
+                    transitionTimingFunction: {
+                        'ios': 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+                        'ios-soft': 'cubic-bezier(0.25, 0.1, 0.25, 1)',
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0a0f14 0%, #0f2027 50%, #1a1a2e 100%);
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-dark {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #d4af37, #f0d875, #d4af37);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient 3s ease infinite;
+        }
+
+        .gradient-border {
+            position: relative;
+        }
+
+        .paper-texture {
+            background-color: #f6f1eb;
+            background-image:
+                linear-gradient(to right, rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+            background-size: 20px 20px;
+            box-shadow:
+                0 1px 2px rgba(0, 0, 0, 0.07),
+                0 2px 4px rgba(0, 0, 0, 0.07),
+                0 4px 8px rgba(0, 0, 0, 0.07),
+                0 8px 16px rgba(0, 0, 0, 0.07),
+                0 16px 32px rgba(0, 0, 0, 0.07),
+                0 32px 64px rgba(0, 0, 0, 0.07);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transform: rotate(-1deg);
+        }
+
+        .paper-clip {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 80px;
+            border: 6px solid #d4af37;
+            border-radius: 20px;
+            z-index: 20;
+            border-bottom: none;
+            opacity: 0.8;
+        }
+
+        .gradient-border::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(135deg, #d4af37, #ff6b9d, #7c3aed, #22d3ee, #d4af37);
+            background-size: 400% 400%;
+            animation: gradient 8s ease infinite;
+            border-radius: inherit;
+            z-index: -1;
+            opacity: 0.7;
+        }
+
+        .card-3d {
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+
+        .card-3d:hover {
+            transform: perspective(1000px) rotateY(5deg) rotateX(5deg) scale(1.05);
+        }
+
+        .spotlight-overlay {
+            -webkit-mask-image: radial-gradient(circle 150px at var(--mouse-x, 50%) var(--mouse-y, 50%), transparent 0%, transparent 120px, black 150px);
+            mask-image: radial-gradient(circle 150px at var(--mouse-x, 50%) var(--mouse-y, 50%), transparent 0%, transparent 120px, black 150px);
+        }
+
+        .flashlight-cursor::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            background: #d4af37;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes spotlightPageFadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .animate-spotlight-page {
+            animation: spotlightPageFadeIn 1.5s ease forwards;
+        }
+
+        .neon-glow {
+            text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 40px currentColor;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #d4af37;
+            border-radius: 50%;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        /* Envelope Animation & Styles */
+        .envelope-trigger {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform-style: preserve-3d;
+        }
+
+        .envelope-trigger:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(212, 175, 55, 0.5);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(212, 175, 55, 0.1);
+        }
+
+        .envelope-content-wrapper {
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform-origin: center top;
+        }
+
+        .envelope-content-wrapper.closed {
+            opacity: 0;
+            transform: scaleY(0);
+            height: 0;
+            overflow: hidden;
+        }
+
+        .envelope-content-wrapper.open {
+            opacity: 1;
+            transform: scaleY(1);
+            height: auto;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 32, 39, 0.8);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #d4af37 0%, #a68a2a 100%);
+            border-radius: 10px;
+            border: 2px solid rgba(15, 32, 39, 0.8);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #f0d875 0%, #d4af37 100%);
+        }
+
+        /* Firefox */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #d4af37 rgba(15, 32, 39, 0.8);
+        }
+    </style>
+</head>
+
+<body class="font-inter text-paper overflow-x-hidden">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        const START_DATE = new Date('2025-06-09T00:00:00');
+        const MAX_ROCKETS = 20;
+        const GRAVITY = 0.05;
+        const FIREWORK_COLORS = ['#d4af37', '#f0d875', '#ff6b9d', '#7c3aed', '#22d3ee', '#ffe66d'];
+
+        const photos = [
+            { src: 'images/photo_09.webp', caption: 'aduh ini malaikat darimana yachh 🥰' },
+            { src: 'images/photo_01.webp', caption: 'cantikk amatt nengg 😋' },
+            { src: 'images/photo_02.webp', caption: 'lucu bangett 🤏' },
+            { src: 'images/photo_16.webp', caption: 'silauu menn.. ✨' },
+            { src: 'images/photo_03.webp', caption: 'first datee uwaaa ^^' },
+            { src: 'images/photo_04.webp', caption: 'pokass 🎄' },
+            { src: 'images/photo_17.webp', caption: 'bukankah ini my...' },
+            { src: 'images/photo_05.webp', caption: 'dapiee and plushiee 🥰' },
+            { src: 'images/photo_06.webp', caption: 'gemoy bangettt 😻' },
+            { src: 'images/photo_07.webp', caption: 'PUDAAAA...' },
+            { src: 'images/photo_08.webp', caption: 'si dapiee imoetzz..' },
+            { src: 'images/photo_10.webp', caption: 'melet bangetzz niehh 😋' },
+            { src: 'images/photo_11.webp', caption: '😋😻' },
+            { src: 'images/photo_12.webp', caption: 'liatin apa tuu? 😏' },
+            { src: 'images/photo_13.webp', caption: 'memang foto pertama bangetzz niee...' },
+            { src: 'images/photo_14.webp', caption: 'ini diaahh hoodie andalan..🔥' },
+            { src: 'images/photo_15.webp', caption: 'cantiknya kelewatan enihh..🥰' },
+            { src: 'images/photo_18.webp', caption: 'duo beruangg 🐻' },
+        ];
+
+        const letterParagraphs = [
+            'hayyieee sayangg',
+            'rasanya.. baru kemarin ajaa kita mulai cerita inii.. aku tidaa bisaa bayangkan gimana yahh hidup aku tanpa kamu ueueueu :<',
+            "kalau sama kamu tuh waktu cepat banget berlaluu ^^",
+            'tapi anehnya gara-gara kamu juga nihh.. hari yang biasanya bosan banget sekarang jadi seru.. aku jadi semangat bangun pagi cuma buat liat notif selamat pagi dari kamu tauu!!',
+            'kamu selalu jadi alasan buat aku senyumm :> bahkan di hari yang paling melelahkan sekalipun... you brought so much light into my world sayangg!!',
+            'aku mau bilang makasih banyakkk ^^',
+            'thanks for sticking with me through my best and my worst..',
+            'yess aku tau aku tidaa selalu gampang dimengerti.. kadang kadang atau malahh sering yapp 😭 pas aku nyebelin atau egois... yahh aku taw siee pasti sering yahh.. tapi kamu tetep ada buat akuu :> sabar menghadapi sifat aku yang ga baik dan kamu tidaa pernah lelahh support aku ueueue :< your patience and kindness mean the world to me...',
+            'aku maww kita tumbuhh samaa-samaa, belajar dewasa sama sama, dan melewati semua fase hidup ini berduaa ^^ aku sih tidaaa peduli sesusah apa tantangan di depan nanti.. asalkan sama kamu 😋 aku yakin kita pasti bisa lewatin semuanya :> because with you, everything feels possible...',
+            'tetap jadi putri yang ceria, baik hati, dan ngangenin kayak gini terus ya ^^ jangan pernah ngerasa sendirian.. karena aku bakal selalu ada di samping kamu... i love you more than any words can explain, today, tomorrow, and forever...!!',
+            'davaa sayangg putriii banyaa banyaa.. ^^',
+            'mwahh mwahh mwahhh 😘💕',
+        ];
+
+        // Floating Particles
+        function Particles() {
+            return (
+                <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+                    {[...Array(20)].map((_, i) => (
+                        <div
+                            key={i}
+                            className="particle opacity-30"
+                            style={{
+                                left: `${Math.random() * 100}%`,
+                                top: `${Math.random() * 100}%`,
+                                animationDelay: `${Math.random() * 4}s`,
+                                animationDuration: `${4 + Math.random() * 4}s`,
+                            }}
+                        />
+                    ))}
+                </div>
+            );
+        }
+
+        const TimeItem = ({ value, label }) => (
+            <div className="glass rounded-xl p-3 md:p-5 text-center min-w-[60px] md:min-w-[90px] hover:scale-105 transition-transform duration-300">
+                <span className="font-courier text-2xl md:text-4xl lg:text-5xl font-bold gradient-text block leading-none">
+                    {String(value).padStart(2, '0')}
+                </span>
+                <span className="font-quicksand text-sm md:text-base text-gold-light/70 uppercase tracking-wider mt-1 block">{label}</span>
+            </div>
+        );
+
+        // Counter Component
+        function Counter() {
+            const [time, setTime] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+            useEffect(() => {
+                const update = () => {
+                    const now = new Date();
+                    let diff = Math.abs(now - START_DATE);
+                    setTime({
+                        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+                        hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+                        minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
+                        seconds: Math.floor((diff % (1000 * 60)) / 1000),
+                    });
+                };
+                update();
+                const interval = setInterval(update, 1000);
+                return () => clearInterval(interval);
+            }, []);
+
+
+
+            return (
+                <div className="flex flex-col items-center gap-4 mb-10">
+                    <div className="flex items-center gap-2 text-gold/60">
+                        <i className="ph ph-clock text-xl animate-pulse"></i>
+                        <span className="font-quicksand text-base md:text-lg uppercase tracking-widest">Time Together</span>
+                    </div>
+                    <div className="flex items-center gap-2 md:gap-4">
+                        <TimeItem value={time.days} label="Days" />
+                        <span className="font-courier text-2xl md:text-4xl text-gold/30 animate-pulse">:</span>
+                        <TimeItem value={time.hours} label="Hours" />
+                        <span className="font-courier text-2xl md:text-4xl text-gold/30 animate-pulse">:</span>
+                        <TimeItem value={time.minutes} label="Mins" />
+                        <span className="font-courier text-2xl md:text-4xl text-gold/30 animate-pulse">:</span>
+                        <TimeItem value={time.seconds} label="Secs" />
+                    </div>
+                </div>
+            );
+        }
+
+        // Photo Card Component - Magazine Style
+        function PhotoCard({ photo, index }) {
+            const delay = index * 50;
+
+            return (
+                <div
+                    className={`group relative cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:scale-[1.03] hover:z-20 opacity-0 animate-slide-up ${index % 3 === 0 ? 'col-span-2 row-span-2 mb-2' : ''}`}
+                    style={{ animationDelay: `${delay}ms` }}
+                >
+                    <div className="relative overflow-hidden rounded-2xl h-full shadow-lg transition-shadow duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)]">
+                        <img src={photo.src} alt="" loading="lazy" className="w-full h-full object-cover aspect-square transition-transform duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-110" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]" />
+                        <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4 lg:p-5 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]">
+                            <p className="font-caveat text-base sm:text-lg md:text-xl lg:text-2xl text-white font-semibold drop-shadow-md line-clamp-2 leading-snug">{photo.caption}</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Typewriter Paragraph Component
+        function TypewriterParagraph({ text, delay, onComplete }) {
+            const [displayText, setDisplayText] = useState('');
+            const [started, setStarted] = useState(false);
+            const [isComplete, setIsComplete] = useState(false);
+
+            useEffect(() => {
+                const startTimer = setTimeout(() => {
+                    setStarted(true);
+                }, delay);
+                return () => clearTimeout(startTimer);
+            }, [delay]);
+
+            useEffect(() => {
+                if (!started) return;
+
+                let currentIndex = 0;
+                // Faster typing for long texts or mobile could be considered, but 25ms is a good sweet spot
+                const typeSpeed = 25;
+
+                const interval = setInterval(() => {
+                    if (currentIndex < text.length) {
+                        setDisplayText(text.slice(0, currentIndex + 1));
+                        currentIndex++;
+                    } else {
+                        setIsComplete(true);
+                        clearInterval(interval);
+                        if (onComplete) onComplete();
+                    }
+                }, typeSpeed);
+
+                return () => clearInterval(interval);
+            }, [started, text]);
+
+            return (
+                <p className={`mb-6 font-courier transition-opacity duration-300 ${started ? 'opacity-100' : 'opacity-0'}`}>
+                    {displayText}
+                    {started && !isComplete && (
+                        <span className="inline-block w-[2px] h-[1em] bg-midnight-dark/60 ml-1 animate-pulse align-middle"></span>
+                    )}
+                </p>
+            );
+        }
+
+        // Letter Interaction Component
+        function LetterInteraction() {
+            const [isOpen, setIsOpen] = useState(false);
+            const [isHovered, setIsHovered] = useState(false);
+            const [showPassword, setShowPassword] = useState(false);
+            const [password, setPassword] = useState('');
+            const [error, setError] = useState(false);
+
+            const handleTriggerClick = () => {
+                setShowPassword(true);
+            };
+
+            const handlePasswordSubmit = (e) => {
+                e.preventDefault();
+                if (password === '082006') {
+                    setIsOpen(true);
+                    setShowPassword(false);
+                } else {
+                    setError(true);
+                    setTimeout(() => setError(false), 500); // Shake animation duration
+                }
+            };
+
+            return (
+                <div className="flex flex-col items-center justify-center w-full px-4">
+
+                    {/* Trigger Button - Glass Envelope */}
+                    <div
+                        className={`envelope-trigger relative w-full max-w-md h-64 rounded-2xl cursor-pointer flex flex-col items-center justify-center overflow-hidden mb-10 ${isOpen || showPassword ? 'hidden' : 'flex'}`}
+                        onClick={handleTriggerClick}
+                        onMouseEnter={() => setIsHovered(true)}
+                        onMouseLeave={() => setIsHovered(false)}
+                    >
+                        {/* Glow effects */}
+                        <div className="absolute inset-0 bg-gradient-to-tr from-gold/10 via-transparent to-rose/10 opacity-50" />
+                        <div className={`absolute inset-0 bg-gold/5 blur-3xl transition-opacity duration-700 ${isHovered ? 'opacity-100' : 'opacity-0'}`} />
+
+                        {/* Icon */}
+                        <div className={`w-20 h-20 rounded-full bg-gradient-to-br from-gold/20 to-gold-light/10 border border-gold/30 flex items-center justify-center mb-6 transition-all duration-500 ${isHovered ? 'scale-110 shadow-[0_0_30px_rgba(212,175,55,0.3)]' : ''}`}>
+                            <i className="ph-fill ph-envelope-simple-open text-4xl text-gold-light"></i>
+                        </div>
+
+                        {/* Text */}
+                        <div className="text-center z-10">
+                            <h3 className="font-playfair text-2xl md:text-3xl text-gold-light mb-2">A Letter For You</h3>
+                            <p className="font-quicksand text-base md:text-lg text-gold-light/60 tracking-widest uppercase">Tap to Read</p>
+                        </div>
+
+                        {/* Decorative corners */}
+                        <div className="absolute top-4 left-4 w-8 h-8 border-t border-l border-gold/20 rounded-tl-lg" />
+                        <div className="absolute top-4 right-4 w-8 h-8 border-t border-r border-gold/20 rounded-tr-lg" />
+                        <div className="absolute bottom-4 left-4 w-8 h-8 border-b border-l border-gold/20 rounded-bl-lg" />
+                        <div className="absolute bottom-4 right-4 w-8 h-8 border-b border-r border-gold/20 rounded-br-lg" />
+                    </div>
+
+                    {/* Password Input Modal */}
+                    {showPassword && !isOpen && (
+                        <div className="glass-dark p-8 rounded-2xl w-full max-w-sm animate-scale-in text-center">
+                            <div className="mb-6">
+                                <i className="ph ph-lock-key text-4xl text-gold mb-2"></i>
+                                <h3 className="font-playfair text-xl text-gold-light">Enter Password</h3>
+                                <p className="font-quicksand text-sm text-white/50">Hint: password laptop kamuu</p>
+                            </div>
+                            <form onSubmit={handlePasswordSubmit} className="flex flex-col gap-4">
+                                <input
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    placeholder="Passcode"
+                                    className={`w-full bg-black/20 border ${error ? 'border-rose animate-shake' : 'border-gold/30 focus:border-gold'} rounded-lg px-4 py-3 text-center text-gold-light font-courier text-lg outline-none transition-all`}
+                                    autoFocus
+                                />
+                                <div className="flex gap-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(false)}
+                                        className="flex-1 py-2 rounded-lg border border-white/10 text-white/60 hover:bg-white/5 transition-colors font-quicksand text-sm"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="flex-1 py-2 rounded-lg bg-gold/20 border border-gold/30 text-gold hover:bg-gold/30 transition-colors font-quicksand text-sm font-semibold"
+                                    >
+                                        Unlock
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    )}
+
+                    {/* The Actual Letter - Expands when open */}
+                    {isOpen && (
+                        <div className="w-full max-w-3xl animate-scale-in origin-center">
+                            <div className="relative paper-texture p-8 md:p-16 my-0 transform rotate-1 transition-transform hover:rotate-0 duration-500 shadow-2xl">
+                                <div className="paper-clip"></div>
+
+                                <div className="absolute -top-6 left-1/2 -translate-x-1/2 z-30">
+                                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gold to-gold-light flex items-center justify-center animate-glow shadow-lg">
+                                        <i className="ph-fill ph-heart text-2xl text-midnight-dark"></i>
+                                    </div>
+                                </div>
+
+                                <div className="text-center mb-10 mt-8 animate-fade-in">
+                                    <h2 className="font-playfair text-3xl md:text-5xl text-midnight-dark/90 font-bold decoration-gold/30 decoration-wavy underline underline-offset-8">"For You"</h2>
+                                </div>
+
+                                <div className="font-courier text-lg md:text-xl leading-relaxed text-midnight-dark/80 whitespace-pre-line min-h-[300px]">
+                                    {/* Optimized delay calculation */}
+                                    {(() => {
+                                        let cumulativeDelay = 500;
+                                        return letterParagraphs.map((p, i) => {
+                                            const delay = cumulativeDelay;
+                                            cumulativeDelay += (p.length * 25) + 400; // Char time + pause
+                                            return <TypewriterParagraph key={i} text={p} delay={delay} />;
+                                        });
+                                    })()}
+                                </div>
+
+                                <div className="text-right mt-12 font-caveat text-3xl md:text-4xl text-midnight-dark transition-opacity duration-1000"
+                                    style={{
+                                        opacity: 0,
+                                        animation: `fadeIn 1s ease-out forwards`,
+                                        animationDelay: `${letterParagraphs.reduce((acc, str) => acc + (str.length * 25) + 400, 500) + 500}ms`
+                                    }}>
+                                    Forever Yours..<br /><br />
+                                    <span className="text-4xl md:text-5xl text-gold-dim font-bold">Dava ^^</span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // Fireworks Class - "Smart & Beautiful" Optimization
+        class Firework {
+            constructor(canvas, ctx, width, height) {
+                this.canvas = canvas;
+                this.ctx = ctx;
+                this.width = width;
+                this.height = height;
+                this.particles = [];
+                this.rockets = [];
+                // Pre-calculate text points ONCE
+                this.textPoints = this.getTextPoints('2026', width / 2, height * 0.35, Math.min(width * 0.22, 220));
+
+                // Aesthetic Palettes
+                this.palettes = [
+                    ['#ff0040', '#ff0080', '#ff00bf', '#ff00ff'], // Neon Pink
+                    ['#00ffff', '#00bfff', '#0080ff', '#0040ff'], // Electric Blue
+                    ['#ffbf00', '#ff8000', '#ff4000', '#ff0000'], // Fiery
+                    ['#bfff00', '#80ff00', '#40ff00', '#00ff00'], // Toxic Green
+                    ['#d4af37', '#fdfbd4', '#f0e68c', '#ffd700'], // Classic Gold
+                    ['#e0c3fc', '#8ec5fc', '#c3e0fc', '#fce3fc'], // Pastel Dream
+                ];
+            }
+
+            clean() {
+                this.particles = [];
+                this.rockets = [];
+            }
+
+            getTextPoints(text, centerX, centerY, fontSize) {
+                const tempCanvas = document.createElement('canvas');
+                const tempCtx = tempCanvas.getContext('2d');
+                tempCanvas.width = this.width;
+                tempCanvas.height = this.height;
+                tempCtx.font = `900 ${fontSize}px 'Playfair Display', serif`;
+                tempCtx.textAlign = 'center';
+                tempCtx.textBaseline = 'middle';
+                tempCtx.fillStyle = '#fff';
+                tempCtx.fillText(text, centerX, centerY);
+
+                const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
+                const points = [];
+                // Optimized sampling density
+                const density = 4;
+                for (let y = 0; y < tempCanvas.height; y += density) {
+                    for (let x = 0; x < tempCanvas.width; x += density) {
+                        const i = (y * tempCanvas.width + x) * 4;
+                        if (imageData.data[i + 3] > 128) {
+                            points.push({ x, y });
+                        }
+                    }
+                }
+                return points;
+            }
+
+            createRocket() {
+                if (this.rockets.length > 3) return; // Limit concurrent rockets
+                const palette = this.palettes[Math.floor(Math.random() * this.palettes.length)];
+
+                this.rockets.push({
+                    x: Math.random() * this.width,
+                    y: this.height,
+                    targetY: this.height * 0.2 + Math.random() * (this.height * 0.4),
+                    speed: 10 + Math.random() * 5,
+                    color: palette[0],
+                    palette: palette
+                });
+            }
+
+            createTextRocket() {
+                this.rockets.push({
+                    x: this.width / 2,
+                    y: this.height,
+                    targetY: this.height * 0.35,
+                    speed: 12,
+                    color: '#d4af37',
+                    palette: ['#d4af37', '#fff', '#ffd700'],
+                    isText: true
+                });
+            }
+
+            explode(x, y, palette, isText) {
+                if (this.particles.length > 1500) return; // Hard cap
+
+                if (isText) {
+                    // Explode into text shape
+                    const points = this.textPoints;
+                    // Randomly sample points to prevent overcrowding
+                    for (let i = 0; i < points.length; i++) {
+                        if (Math.random() > 0.4) continue; // Skip 40% of points for performance
+                        const p = points[i];
+                        this.particles.push({
+                            x: x,
+                            y: y,
+                            vx: (p.x - x) * 0.08, // Lerp speed
+                            vy: (p.y - y) * 0.08,
+                            targetX: p.x,
+                            targetY: p.y,
+                            color: palette[Math.floor(Math.random() * palette.length)],
+                            alpha: 1,
+                            decay: 0.01 + Math.random() * 0.01,
+                            isText: true,
+                            life: 0
+                        });
+                    }
+                } else {
+                    // Regular explosion
+                    const count = 50 + Math.random() * 30;
+                    const type = Math.random();
+
+                    for (let i = 0; i < count; i++) {
+                        const angle = Math.random() * Math.PI * 2;
+                        // Varied speed for depth
+                        const speed = Math.random() * 5 + 2;
+
+                        this.particles.push({
+                            x: x, y: y,
+                            vx: Math.cos(angle) * speed,
+                            vy: Math.sin(angle) * speed,
+                            color: palette[Math.floor(Math.random() * palette.length)],
+                            alpha: 1,
+                            decay: 0.015 + Math.random() * 0.015,
+                            gravity: 0.05
+                        });
+                    }
+                }
+            }
+
+            update() {
+                // Rockets
+                for (let i = this.rockets.length - 1; i >= 0; i--) {
+                    const r = this.rockets[i];
+                    r.y -= r.speed;
+                    // Ease out speed
+                    r.speed *= 0.98;
+
+                    if (r.y <= r.targetY || r.speed < 1) {
+                        this.explode(r.x, r.y, r.palette, r.isText);
+                        this.rockets.splice(i, 1);
+                    }
+                }
+
+                // Particles
+                for (let i = this.particles.length - 1; i >= 0; i--) {
+                    const p = this.particles[i];
+
+                    if (p.isText) {
+                        p.life++;
+                        if (p.life < 20) {
+                            p.x += p.vx;
+                            p.y += p.vy;
+                        } else {
+                            if (p.life > 100) p.alpha -= 0.02;
+                        }
+                    } else {
+                        p.x += p.vx;
+                        p.y += p.vy;
+                        p.vy += p.gravity || 0;
+                        p.vx *= 0.96; // Air resistance
+                        p.vy *= 0.96;
+                        p.alpha -= p.decay;
+                    }
+
+                    if (p.alpha <= 0) this.particles.splice(i, 1);
+                }
+            }
+
+            draw() {
+                // THE SECRET SAUCE: Trail Effect
+                // Instead of clearing, draw a semi-transparent black rectangle
+                // This creates distinct trails without computing them manually!
+                this.ctx.globalCompositeOperation = 'source-over';
+                this.ctx.fillStyle = 'rgba(10, 15, 20, 0.2)'; // Adjust alpha for trail length
+                this.ctx.fillRect(0, 0, this.width, this.height);
+
+                // Enable additive blending for cheap GLOW effect
+                this.ctx.globalCompositeOperation = 'lighter';
+
+                // Draw Rockets
+                for (let r of this.rockets) {
+                    this.ctx.fillStyle = r.color;
+                    this.ctx.beginPath();
+                    this.ctx.arc(r.x, r.y, 3, 0, Math.PI * 2);
+                    this.ctx.fill();
+                }
+
+                // Draw Particles - Single loop, minimal logic
+                for (let p of this.particles) {
+                    this.ctx.fillStyle = p.color;
+                    this.ctx.globalAlpha = p.alpha;
+                    this.ctx.beginPath();
+                    // Small rectifier for speed (fillRect is faster than arc for 1x1 or 2x2 particles)
+                    // But arc looks better. Let's stick to small arc.
+                    this.ctx.arc(p.x, p.y, p.isText ? 1.5 : 2, 0, Math.PI * 2);
+                    this.ctx.fill();
+                }
+
+                this.ctx.globalAlpha = 1;
+                this.ctx.globalCompositeOperation = 'source-over';
+            }
+        }
+
+        // Music Player Component
+        // function MusicPlayer() { <-- Removed incorrect wrapper
+        // Global Data & Helpers
+        const playlistData = [
+            {
+                "src": "audio/Anything You Want - Reality Club.mp3",
+                "title": "Anything You Want",
+                "artist": "Reality Club",
+                "cover": "images/covers/Anything You Want - Reality Club.jpg"
+            },
+            {
+                "src": "audio/Can't Help Falling in Love - Elvis Presley.mp3",
+                "title": "Can't Help Falling in Love",
+                "artist": "Elvis Presley",
+                "cover": "images/covers/Can't Help Falling in Love - Elvis Presley.jpg"
+            },
+            {
+                "src": "audio/Glue Song - beabadoobee.mp3",
+                "title": "Glue Song",
+                "artist": "beabadoobee",
+                "cover": "images/covers/Glue Song - beabadoobee.jpg"
+            },
+            {
+                "src": "audio/Here With Me - d4vd.mp3",
+                "title": "Here With Me",
+                "artist": "d4vd",
+                "cover": "images/covers/Here With Me - d4vd.jpg"
+            },
+            {
+                "src": "audio/Until I Found You - Stephen Sanchez.mp3",
+                "title": "Until I Found You",
+                "artist": "Stephen Sanchez",
+                "cover": "images/covers/Until I Found You - Stephen Sanchez.jpg"
+            }
+        ];
+
+        const formatTime = (time) => {
+            if (!time) return '0:00';
+            const minutes = Math.floor(time / 60);
+            const seconds = Math.floor(time % 60);
+            return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        };
+
+        // Music Player Component
+        function MusicPlayer() {
+            // Data extracted via python script for reliability
+            const [songs] = useState(playlistData);
+            const [currentSongIndex, setCurrentSongIndex] = useState(0);
+            const [isPlaying, setIsPlaying] = useState(false);
+            const [progress, setProgress] = useState(0);
+            const [duration, setDuration] = useState(0);
+            const [hoverTime, setHoverTime] = useState(null);
+            const [hoverPosition, setHoverPosition] = useState(0);
+            const [isExpanded, setIsExpanded] = useState(false);
+            const [isClosing, setIsClosing] = useState(false);
+            const audioRef = useRef(null);
+            const progressBarRef = useRef(null);
+
+            const handleMinimize = () => {
+                setIsClosing(true);
+                setTimeout(() => {
+                    setIsExpanded(false);
+                    setIsClosing(false);
+                }, 200);
+            };
+
+            // Autoplay on mount with fallback
+            useEffect(() => {
+                const playAudio = async () => {
+                    if (audioRef.current) {
+                        try {
+                            await audioRef.current.play();
+                            setIsPlaying(true);
+                        } catch (err) {
+                            console.log('Autoplay blocked, waiting for user gesture...');
+                            // Fallback: Play on first valid user gesture
+                            const handleInteraction = async () => {
+                                try {
+                                    await audioRef.current.play();
+                                    setIsPlaying(true);
+                                    // Remove all listeners after successful play
+                                    document.removeEventListener('click', handleInteraction);
+                                    document.removeEventListener('keydown', handleInteraction);
+                                    document.removeEventListener('touchstart', handleInteraction);
+                                } catch (e) {
+                                    console.log('Play attempt failed:', e);
+                                }
+                            };
+                            // Only use events that count as user gestures
+                            document.addEventListener('click', handleInteraction);
+                            document.addEventListener('keydown', handleInteraction);
+                            document.addEventListener('touchstart', handleInteraction);
+                        }
+                    }
+                };
+
+                // Small delay to ensure audio element is ready
+                const timer = setTimeout(playAudio, 500);
+                return () => clearTimeout(timer);
+            }, []);
+
+
+
+
+            const handlePlayPause = () => {
+                if (isPlaying) {
+                    audioRef.current.pause();
+                } else {
+                    audioRef.current.play();
+                }
+                setIsPlaying(!isPlaying);
+            };
+
+            const handleTimeUpdate = () => {
+                if (!audioRef.current) return;
+                const current = audioRef.current.currentTime;
+                const total = audioRef.current.duration;
+                if (total && !isNaN(total) && isFinite(total)) {
+                    const newProgress = (current / total) * 100;
+                    setProgress(Math.min(100, Math.max(0, newProgress)));
+                    setDuration(total);
+                }
+            };
+
+            const handleSongSelect = (index) => {
+                setCurrentSongIndex(index);
+                setIsPlaying(true);
+                setTimeout(() => audioRef.current.play(), 100);
+            };
+
+            const handleNext = () => {
+                const nextDocs = (currentSongIndex + 1) % songs.length;
+                handleSongSelect(nextDocs);
+            };
+
+            const handlePrev = () => {
+                const prevDocs = (currentSongIndex - 1 + songs.length) % songs.length;
+                handleSongSelect(prevDocs);
+            };
+
+            const handleSeek = (e) => {
+                const rect = progressBarRef.current.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const width = rect.width;
+                const seekTime = (clickX / width) * audioRef.current.duration;
+                audioRef.current.currentTime = Math.max(0, Math.min(seekTime, audioRef.current.duration));
+            };
+
+            const handleSliderHover = (e) => {
+                if (!audioRef.current?.duration) return;
+                const rect = progressBarRef.current.getBoundingClientRect();
+                const hoverX = e.clientX - rect.left;
+                const width = rect.width;
+                const hoverRatio = Math.max(0, Math.min(hoverX / width, 1));
+                const time = hoverRatio * audioRef.current.duration;
+                setHoverTime(time);
+                setHoverPosition((hoverX / width) * 100);
+            };
+
+            const handleSliderLeave = () => {
+                setHoverTime(null);
+            };
+
+            const handleEnded = () => {
+                handleNext();
+            };
+
+
+
+            if (songs.length === 0) return null;
+
+            const currentSong = songs[currentSongIndex];
+
+            return (
+                <div className="fixed bottom-4 right-4 z-[9999]">
+                    {/* Collapsed Mini Player */}
+                    {!isExpanded && (
+                        <div
+                            className="bg-black/80 backdrop-blur-xl rounded-2xl p-3 flex items-center gap-3 cursor-pointer hover:scale-[1.02] transition-all duration-300 ease-out shadow-2xl border border-gold/30 animate-slide-up"
+                            onClick={() => setIsExpanded(true)}
+                        >
+                            {/* Album Art */}
+                            <div className={`w-12 h-12 rounded-full overflow-hidden border-2 border-gold/50 ${isPlaying ? 'animate-[spin_4s_linear_infinite]' : ''}`}>
+                                {currentSong.cover ? (
+                                    <img src={currentSong.cover} alt="" className="w-full h-full object-cover" />
+                                ) : (
+                                    <div className="w-full h-full bg-gold/20 flex items-center justify-center">
+                                        <i className="ph-fill ph-music-note text-gold"></i>
+                                    </div>
+                                )}
+                            </div>
+                            {/* Info */}
+                            <div className="max-w-[120px]">
+                                <p className="font-quicksand text-base font-semibold text-gold truncate">{currentSong.title}</p>
+                                <p className="font-quicksand text-sm text-white/80 truncate">{currentSong.artist}</p>
+                            </div>
+                            {/* Play/Pause */}
+                            <button
+                                onClick={(e) => { e.stopPropagation(); handlePlayPause(); }}
+                                className="w-10 h-10 rounded-full bg-gold flex items-center justify-center hover:scale-110 transition-all duration-200"
+                            >
+                                <i className={`ph-fill ${isPlaying ? 'ph-pause' : 'ph-play'} text-white text-lg`}></i>
+                            </button>
+                        </div>
+                    )}
+
+                    {/* Expanded Player Panel */}
+                    {isExpanded && (
+                        <div className={`bg-black/90 backdrop-blur-xl rounded-3xl overflow-hidden shadow-2xl border border-gold/30 w-80 md:w-96 origin-bottom-right ${isClosing ? 'animate-scale-out' : 'animate-scale-in'}`}>
+                            {/* Header with close button */}
+                            <div className="flex items-center justify-between p-4 border-b border-white/10">
+                                <div className="flex items-center gap-2">
+                                    <i className="ph-fill ph-music-notes text-gold"></i>
+                                    <span className="font-quicksand font-bold text-white">Now Playing</span>
+                                </div>
+                                <button onClick={handleMinimize} className="text-white/50 hover:text-white transition-all duration-200">
+                                    <i className="ph ph-minus text-xl"></i>
+                                </button>
+                            </div>
+
+                            {/* Cover & Info */}
+                            <div className="p-6 flex flex-col items-center">
+                                <div className={`w-32 h-32 rounded-full overflow-hidden border-4 border-gold/50 shadow-lg mb-4 ${isPlaying ? 'animate-[spin_4s_linear_infinite]' : ''}`}>
+                                    {currentSong.cover ? (
+                                        <img src={currentSong.cover} alt="" className="w-full h-full object-cover" />
+                                    ) : (
+                                        <div className="w-full h-full bg-gold/20 flex items-center justify-center">
+                                            <i className="ph-fill ph-music-note text-3xl text-gold"></i>
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="text-center mb-6">
+                                    <p className="font-playfair text-xl font-bold text-gold mb-1">{currentSong.title}</p>
+                                    <p className="font-quicksand text-sm text-white/70">{currentSong.artist}</p>
+                                </div>
+
+                                {/* Progress Bar */}
+                                <div className="w-full mb-4 group relative">
+                                    <div
+                                        ref={progressBarRef}
+                                        className="w-full h-1.5 bg-white/10 rounded-full cursor-pointer overflow-hidden"
+                                        onClick={handleSeek}
+                                        onMouseMove={handleSliderHover}
+                                        onMouseLeave={handleSliderLeave}
+                                    >
+                                        <div
+                                            className="h-full bg-gold rounded-full relative"
+                                            style={{ width: `${progress}%` }}
+                                        >
+                                            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
+                                        </div>
+                                        {/* Hover Indicator */}
+                                        {hoverTime !== null && (
+                                            <div
+                                                className="absolute top-0 h-full bg-white/20 pointer-events-none"
+                                                style={{
+                                                    left: `${progress}%`,
+                                                    width: `${hoverPosition - progress}%`
+                                                }}
+                                            />
+                                        )}
+                                    </div>
+
+                                    {/* Hover Time Tooltip */}
+                                    {hoverTime !== null && (
+                                        <div
+                                            className="absolute -top-8 bg-black/80 px-2 py-1 rounded text-xs text-white transform -translate-x-1/2 pointer-events-none border border-white/10"
+                                            style={{ left: `${hoverPosition}%` }}
+                                        >
+                                            {formatTime(hoverTime)}
+                                        </div>
+                                    )}
+
+                                    <div className="flex justify-between mt-2 text-xs font-courier text-white/40">
+                                        <span>{formatTime(audioRef.current?.currentTime)}</span>
+                                        <span>{formatTime(duration)}</span>
+                                    </div>
+                                </div>
+
+                                {/* Controls */}
+                                <div className="flex items-center gap-6">
+                                    <button onClick={handlePrev} className="text-white/70 hover:text-gold transition-colors transform hover:scale-110">
+                                        <i className="ph-fill ph-skip-back text-2xl"></i>
+                                    </button>
+                                    <button
+                                        onClick={handlePlayPause}
+                                        className="w-14 h-14 rounded-full bg-gold text-white flex items-center justify-center hover:scale-110 hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300"
+                                    >
+                                        <i className={`ph-fill ${isPlaying ? 'ph-pause' : 'ph-play'} text-2xl`}></i>
+                                    </button>
+                                    <button onClick={handleNext} className="text-white/70 hover:text-gold transition-colors transform hover:scale-110">
+                                        <i className="ph-fill ph-skip-forward text-2xl"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Playlist */}
+                            <div className="max-h-40 overflow-y-auto border-t border-white/10">
+                                {songs.map((song, idx) => (
+                                    <div
+                                        key={idx}
+                                        onClick={() => handleSongSelect(idx)}
+                                        className={`flex items-center gap-3 p-3 cursor-pointer transition-all duration-200 ${currentSongIndex === idx ? 'bg-gold/20' : 'hover:bg-white/5'}`}
+                                    >
+                                        <span className="font-courier text-sm text-white/40 w-4">{idx + 1}</span>
+                                        <div className="flex-1 min-w-0">
+                                            <p className={`font-quicksand text-base truncate ${currentSongIndex === idx ? 'text-gold' : 'text-white/80'}`}>{song.title}</p>
+                                            <p className="font-quicksand text-sm text-white/50 truncate">{song.artist}</p>
+                                        </div>
+                                        {currentSongIndex === idx && isPlaying && (
+                                            <div className="flex gap-0.5">
+                                                <div className="w-0.5 h-3 bg-gold animate-pulse"></div>
+                                                <div className="w-0.5 h-3 bg-gold animate-pulse" style={{ animationDelay: '0.1s' }}></div>
+                                                <div className="w-0.5 h-3 bg-gold animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    <audio
+                        ref={audioRef}
+                        src={currentSong.src}
+                        autoPlay
+                        onTimeUpdate={handleTimeUpdate}
+                        onEnded={handleEnded}
+                        onCanPlayThrough={() => {
+                            if (!isPlaying) {
+                                audioRef.current.play().then(() => setIsPlaying(true)).catch(console.log);
+                            }
+                        }}
+                        onError={(e) => console.error('Audio error:', e.target.error)}
+                    />
+                </div>
+            );
+        }
+
+
+
+
+
+
+
+
+        // Main App
+        function App() {
+            const [page, setPage] = useState('main');
+            const [fireworksVisible, setFireworksVisible] = useState(false);
+            const [fadingOut, setFadingOut] = useState(false);
+            const canvasRef = useRef(null);
+            const fireworkRef = useRef(null);
+            const overlayRef = useRef(null);
+            const cursorRef = useRef(null);
+
+            const handleUnlock = () => {
+                setPage('fireworks');
+                setTimeout(() => setFireworksVisible(true), 100);
+            };
+
+            const handleContinue = () => {
+                setFadingOut(true);
+                setTimeout(() => {
+                    setPage('spotlight');
+                    setFadingOut(false);
+                }, 800);
+            };
+
+            const handleBack = () => {
+                setPage('main');
+                setFireworksVisible(false);
+            };
+
+            useEffect(() => {
+                if (page !== 'fireworks' || !canvasRef.current) return;
+                const canvas = canvasRef.current;
+
+                // HIGH QUALITY RENDERING (DPR Support)
+                const dpr = window.devicePixelRatio || 1;
+                canvas.width = window.innerWidth * dpr;
+                canvas.height = window.innerHeight * dpr;
+                canvas.style.width = window.innerWidth + 'px';
+                canvas.style.height = window.innerHeight + 'px';
+
+                const ctx = canvas.getContext('2d');
+                ctx.scale(dpr, dpr); // Scale context logic to match logical pixels
+
+                // Pass logical width/height to Firework class
+                fireworkRef.current = new Firework(canvas, ctx, window.innerWidth, window.innerHeight);
+
+                let animId;
+                let launchInterval;
+                let textInterval;
+                let isPaused = false;
+
+                const animate = () => {
+                    if (!isPaused && fireworkRef.current) {
+                        fireworkRef.current.update();
+                        fireworkRef.current.draw();
+                    }
+                    animId = requestAnimationFrame(animate);
+                };
+
+                const launch = () => {
+                    if (isPaused || !fireworkRef.current) return;
+                    fireworkRef.current.createRocket();
+                };
+
+                const handleVisibilityChange = () => {
+                    if (document.hidden) {
+                        isPaused = true;
+                        if (fireworkRef.current) fireworkRef.current.clean();
+                    } else {
+                        isPaused = false;
+                    }
+                };
+
+                document.addEventListener('visibilitychange', handleVisibilityChange);
+
+                animate();
+
+                // Launch the special 2026 text firework at start
+                setTimeout(() => {
+                    if (fireworkRef.current) fireworkRef.current.createTextRocket();
+                }, 800);
+
+                launch();
+                launchInterval = setInterval(launch, 2000); // Relaxed interval
+
+                // Periodically launch 2026 text firework
+                textInterval = setInterval(() => {
+                    if (!isPaused && fireworkRef.current) {
+                        fireworkRef.current.createTextRocket();
+                    }
+                }, 10000);
+
+                const handleResize = () => {
+                    if (canvasRef.current) {
+                        canvasRef.current.width = window.innerWidth;
+                        canvasRef.current.height = window.innerHeight;
+                        if (fireworkRef.current) {
+                            fireworkRef.current.width = window.innerWidth;
+                            fireworkRef.current.height = window.innerHeight;
+                            // Pre-calculate text points again on resize
+                            fireworkRef.current.textPoints = fireworkRef.current.getTextPoints('2026', window.innerWidth / 2, window.innerHeight * 0.35, Math.min(window.innerWidth * 0.22, 220));
+                        }
+                    }
+                };
+
+                window.addEventListener('resize', handleResize);
+
+                return () => {
+                    document.removeEventListener('visibilitychange', handleVisibilityChange);
+                    window.removeEventListener('resize', handleResize);
+                    cancelAnimationFrame(animId);
+                    clearInterval(launchInterval);
+                    clearInterval(textInterval);
+                };
+            }, [page]);
+
+            const handleMouseMove = (e) => {
+                if (overlayRef.current) {
+                    overlayRef.current.style.setProperty('--mouse-x', `${e.clientX}px`);
+                    overlayRef.current.style.setProperty('--mouse-y', `${e.clientY}px`);
+                }
+                if (cursorRef.current) {
+                    cursorRef.current.style.left = `${e.clientX}px`;
+                    cursorRef.current.style.top = `${e.clientY}px`;
+                }
+            };
+
+            // Render music player for all pages
+            const showMusicPlayer = true;
+
+            if (page === 'main') {
+                return (
+                    <>
+                        {showMusicPlayer && <MusicPlayer />}
+                        <div className="relative">
+                            <Particles />
+
+                            {/* Intro Section */}
+                            <section className="min-h-screen flex flex-col justify-center items-center text-center px-5 py-20 relative">
+                                {/* Decorative circles */}
+                                <div className="absolute top-20 left-10 w-64 h-64 bg-gold/10 rounded-full blur-3xl animate-float" />
+                                <div className="absolute bottom-20 right-10 w-80 h-80 bg-rose/10 rounded-full blur-3xl animate-float-delay" />
+
+                                <div className="relative z-10">
+                                    <h1 className="mb-8">
+                                        <span className="font-quicksand text-base md:text-xl font-light tracking-[0.4em] text-gold-light/60 block mb-4 uppercase">The Journey Of</span>
+                                        <span className="font-playfair text-6xl md:text-9xl font-bold gradient-text lowercase neon-glow">dnp</span>
+                                    </h1>
+                                    <p className="font-caveat text-2xl md:text-4xl text-gold-light/80 mb-16 flex items-center justify-center gap-3">
+                                        <i className="ph ph-infinity"></i>
+                                        <span>Endless Memories</span>
+                                        <i className="ph ph-sparkle"></i>
+                                    </p>
+                                    <Counter />
+                                    <p className="font-quicksand text-lg md:text-xl text-paper/60 italic mt-8">"Every second with you is my favorite."</p>
+                                </div>
+
+                                <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+                                    <i className="ph ph-caret-double-down text-3xl text-gold/40"></i>
+                                </div>
+                            </section>
+
+                            <section className="min-h-screen py-24 px-5 relative">
+                                <div className="text-center mb-16">
+                                    <span className="font-quicksand text-base md:text-lg uppercase tracking-[0.3em] text-gold/50 block mb-4">Gallery</span>
+                                    <h2 className="font-playfair text-4xl md:text-6xl font-bold gradient-text mb-4">Timeless Frames</h2>
+                                    <p className="font-caveat text-2xl md:text-3xl text-gold-light/60">Where time stands still just for us.</p>
+                                </div>
+                                <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-2 px-4 auto-rows-[minmax(100px,auto)] grid-flow-dense">
+                                    {photos.map((photo, i) => <PhotoCard key={i} photo={photo} index={i} />)}
+                                </div>
+                            </section>
+
+
+
+                            {/* Message Section */}
+                            <section className="min-h-screen flex justify-center items-center py-24 px-5 relative">
+                                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-midnight-dark/50 to-transparent" />
+                                <LetterInteraction />
+                            </section>
+
+                            {/* Ending Section */}
+                            <section className="min-h-screen flex justify-center items-center relative">
+                                <div className="absolute inset-0">
+                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gold/5 rounded-full blur-3xl animate-pulse-slow" />
+                                </div>
+                                <button onClick={handleUnlock} className="group relative font-quicksand text-lg md:text-xl px-10 md:px-14 py-4 md:py-5 bg-transparent overflow-hidden rounded-full transition-all duration-500 hover:scale-105">
+                                    <div className="absolute inset-0 bg-gradient-to-r from-gold via-rose to-violet opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full" />
+                                    <div className="absolute inset-[2px] bg-midnight-dark rounded-full" />
+                                    <span className="relative flex items-center gap-3 text-gold group-hover:text-gold-light transition-colors">
+                                        <i className="ph ph-lock-key text-2xl"></i>
+                                        <span className="font-semibold tracking-wide">Unlock 2026</span>
+                                    </span>
+                                </button>
+                            </section>
+                        </div>
+                    </>
+                );
+            }
+
+            if (page === 'fireworks') {
+                return (
+                    <>
+                        {showMusicPlayer && <MusicPlayer />}
+                        <section className={`fixed inset-0 bg-gradient-to-b from-midnight-dark to-midnight z-[2000] flex flex-col justify-center items-center text-center overflow-hidden ${fadingOut ? 'opacity-0 transition-opacity duration-700' : ''}`}>
+                            <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-[5]"></canvas>
+                            <div className="relative z-10">
+                                <h2 className={`font-playfair text-4xl md:text-7xl font-bold mb-6 transition-all duration-1000 ${fireworksVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+                                    <span className="gradient-text neon-glow drop-shadow-lg">Happy New Year</span><br />
+                                    <span className="text-gold-light drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">Sayaangg!!</span>
+                                </h2>
+                                <p className={`font-caveat text-3xl md:text-5xl text-paper mb-12 transition-all duration-1000 delay-500 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${fireworksVisible ? 'opacity-100' : 'opacity-0'}`}>
+                                    Page 1 of 365: Still You.
+                                </p>
+                                <button onClick={handleContinue} className={`group font-quicksand text-lg px-12 py-5 bg-gradient-to-r from-gold/20 to-gold-light/20 backdrop-blur-md border border-gold/40 rounded-full hover:bg-gold/30 hover:border-gold hover:scale-105 hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] transition-all duration-300 ${fireworksVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
+                                    <span className="flex items-center gap-3 text-gold group-hover:text-gold-light">
+                                        Continue <i className="ph ph-arrow-right text-xl group-hover:translate-x-1 transition-transform"></i>
+                                    </span>
+                                </button>
+                            </div>
+                        </section>
+                    </>
+                );
+            }
+
+            if (page === 'spotlight') {
+                return (
+                    <>
+                        {showMusicPlayer && <MusicPlayer />}
+                        <section className="fixed inset-0 bg-midnight-dark z-[2001] flex flex-col justify-start items-center py-10 cursor-none animate-spotlight-page overflow-y-auto" onMouseMove={handleMouseMove}>
+                            <div className="relative w-full flex flex-col justify-center items-center text-center px-5 my-auto z-[1]">
+                                <div className="relative mb-8 group cursor-pointer flex justify-center transform transition-transform duration-500 hover:scale-105 hover:rotate-0 -rotate-2">
+                                    {/* The Frame Object */}
+                                    <div className="relative bg-[#faf8f5] p-2 md:p-3 rounded shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-[#e2d9d0] rotate-1">
+                                        {/* Inner Image */}
+                                        <div className="relative overflow-hidden max-w-[50vw] md:max-w-[16rem] max-h-[35vh]">
+                                            <img src="images/photo_spotlight.webp" alt="" className="w-auto h-full object-contain max-h-[35vh] block filter brightness-[1.02] contrast-[1.05]" />
+
+                                            {/* Grain/Texture Overlay */}
+                                            <div className="absolute inset-0 bg-noise opacity-[0.03] pointer-events-none"></div>
+                                            <div className="absolute inset-0 ring-1 ring-inset ring-black/10 pointer-events-none"></div>
+                                        </div>
+
+                                        {/* Glossy reflection on the frame */}
+                                        <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/40 to-white/0 opacity-0 group-hover:opacity-30 transition-opacity duration-700 pointer-events-none rounded"></div>
+                                    </div>
+
+                                    {/* Decorations: Tape */}
+                                    <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-12 h-4 bg-white/20 backdrop-blur-sm border border-white/30 rotate-1 shadow-sm opacity-90 z-10"></div>
+                                </div>
+                                <h2 className="font-playfair text-3xl md:text-6xl font-bold gradient-text mb-6 pb-2 leading-normal">u are my light</h2>
+                                <p className="font-caveat text-2xl md:text-3xl text-paper/80 max-w-xl leading-relaxed mb-8">
+                                    gelap itu sebenernya nyeremin tauu :&lt;
+                                    <br />
+                                    tapi untung ada kamu !!
+                                    <br />
+                                    u are my favorite light jadi aku tidaa takut lagiee ^^
+                                    <br />
+                                    terus bersinar buat aku ya sayangg
+                                    <br />
+                                    mwahh mwahh mwahhh :3
+                                </p>
+
+                            </div>
+                            <div ref={overlayRef} className="spotlight-overlay fixed inset-0 bg-black pointer-events-none z-10"></div>
+                            <div className="font-caveat text-xl md:text-2xl text-gold/80 my-8 flex items-center gap-3 z-[5]">
+                                <i className="ph ph-flashlight text-2xl animate-wiggle"></i>
+                                <span>Move your mouse to search...</span>
+                            </div>
+                            <button onClick={handleBack} className="font-quicksand text-base px-8 py-3 glass rounded-full hover:bg-gold/10 transition-all duration-300 z-20 mb-10">
+                                <span className="flex items-center gap-2 text-gold">
+                                    <i className="ph ph-arrow-left"></i> Back to Start
+                                </span>
+                            </button>
+                            <div ref={cursorRef} className="flashlight-cursor fixed w-12 h-12 rounded-full border-2 border-gold pointer-events-none z-[2002] -translate-x-1/2 -translate-y-1/2 shadow-[0_0_30px_rgba(212,175,55,0.5)] hidden md:block"></div>
+                        </section>
+                    </>
+                );
+            }
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+
+</html>
