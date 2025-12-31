@@ -1272,6 +1272,7 @@
             const [hoverPosition, setHoverPosition] = useState(0);
             const [isExpanded, setIsExpanded] = useState(false);
             const [isClosing, setIsClosing] = useState(false);
+            const [isDragging, setIsDragging] = useState(false);
             const audioRef = useRef(null);
             const progressBarRef = useRef(null);
 
@@ -1325,6 +1326,7 @@
 
             const handleTimeUpdate = () => {
                 if (!audioRef.current) return;
+                if (isDragging) return; // Don't update progress while dragging
                 const current = audioRef.current.currentTime;
                 const total = audioRef.current.duration;
                 if (total && !isNaN(total) && isFinite(total)) {
@@ -1350,7 +1352,20 @@
                 handleSongSelect(prevDocs);
             };
 
-            const handleSeek = (e) => {
+            const handleSeekStart = (e) => {
+                setIsDragging(true);
+                handleSeekMove(e);
+            };
+
+            const handleSeekMove = (e) => {
+                if (!isDragging && e.type !== 'mousedown' && e.type !== 'touchstart') return;
+
+                // For mouse hover effect
+                if (e.type === 'mousemove' && !isDragging) {
+                    handleSliderHover(e);
+                    return;
+                }
+
                 const rect = progressBarRef.current.getBoundingClientRect();
                 let clientX;
                 if (e.touches && e.touches.length > 0) {
@@ -1361,8 +1376,30 @@
 
                 const clickX = clientX - rect.left;
                 const width = rect.width;
-                const seekTime = (clickX / width) * audioRef.current.duration;
-                audioRef.current.currentTime = Math.max(0, Math.min(seekTime, audioRef.current.duration));
+                const newProgress = Math.max(0, Math.min((clickX / width) * 100, 100));
+                setProgress(newProgress);
+            };
+
+            const handleSeekEnd = (e) => {
+                if (!isDragging) return;
+                setIsDragging(false);
+
+                const rect = progressBarRef.current.getBoundingClientRect();
+                let clientX;
+                if (e.changedTouches && e.changedTouches.length > 0) {
+                    clientX = e.changedTouches[0].clientX;
+                } else if (e.touches && e.touches.length > 0) {
+                    clientX = e.touches[0].clientX;
+                } else {
+                    clientX = e.clientX;
+                }
+
+                if (clientX !== undefined) {
+                    const clickX = clientX - rect.left;
+                    const width = rect.width;
+                    const seekTime = (clickX / width) * audioRef.current.duration;
+                    audioRef.current.currentTime = Math.max(0, Math.min(seekTime, audioRef.current.duration));
+                }
             };
 
             const handleSliderHover = (e) => {
@@ -1457,12 +1494,14 @@
                                 <div className="w-full mb-4 group relative">
                                     <div
                                         ref={progressBarRef}
-                                        className="w-full h-1.5 bg-white/10 rounded-full cursor-pointer overflow-hidden"
-                                        onClick={handleSeek}
-                                        onTouchStart={handleSeek}
-                                        onTouchMove={handleSeek}
-                                        onMouseMove={handleSliderHover}
-                                        onMouseLeave={handleSliderLeave}
+                                        className="w-full h-1.5 bg-white/10 rounded-full cursor-pointer overflow-hidden touch-none"
+                                        onMouseDown={handleSeekStart}
+                                        onMouseMove={handleSeekMove}
+                                        onMouseUp={handleSeekEnd}
+                                        onMouseLeave={(e) => { handleSeekEnd(e); handleSliderLeave(); }}
+                                        onTouchStart={handleSeekStart}
+                                        onTouchMove={handleSeekMove}
+                                        onTouchEnd={handleSeekEnd}
                                     >
                                         <div
                                             className="h-full bg-gold rounded-full relative"
@@ -1470,27 +1509,16 @@
                                         >
                                             <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
                                         </div>
-                                        {/* Hover Indicator */}
+                                        {/* Hover Tooltip - simplified */}
                                         {hoverTime !== null && (
                                             <div
-                                                className="absolute top-0 h-full bg-white/20 pointer-events-none"
-                                                style={{
-                                                    left: `${progress}%`,
-                                                    width: `${hoverPosition - progress}%`
-                                                }}
-                                            />
+                                                className="absolute -top-8 px-2 py-1 bg-white/20 backdrop-blur-md rounded text-xs font-quicksand text-white transform -translate-x-1/2 pointer-events-none"
+                                                style={{ left: `${hoverPosition}%` }}
+                                            >
+                                                {formatTime(hoverTime)}
+                                            </div>
                                         )}
                                     </div>
-
-                                    {/* Hover Time Tooltip */}
-                                    {hoverTime !== null && (
-                                        <div
-                                            className="absolute -top-8 bg-black/80 px-2 py-1 rounded text-xs text-white transform -translate-x-1/2 pointer-events-none border border-white/10"
-                                            style={{ left: `${hoverPosition}%` }}
-                                        >
-                                            {formatTime(hoverTime)}
-                                        </div>
-                                    )}
 
                                     <div className="flex justify-between mt-2 text-xs font-courier text-white/40">
                                         <span>{formatTime(audioRef.current?.currentTime)}</span>
