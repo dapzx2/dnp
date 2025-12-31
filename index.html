@@ -1015,7 +1015,9 @@
                 this.height = height;
                 this.particles = [];
                 this.rockets = [];
-                this.textPoints = this.getTextPoints('2026', width / 2, height * 0.35, Math.min(width * 0.22, 220));
+                const isMobile = width < 768;
+                const textSize = isMobile ? Math.min(width * 0.40, 180) : Math.min(width * 0.22, 220);
+                this.textPoints = this.getTextPoints('2026', width / 2, height * 0.20, textSize);
 
                 this.palettes = [
                     ['#ff0040', '#ff0080', '#ff00bf', '#ff00ff'],
@@ -1077,10 +1079,11 @@
                 this.rockets.push({
                     x: this.width / 2,
                     y: this.height,
-                    targetY: this.height * 0.35,
-                    speed: 12,
-                    color: '#d4af37',
-                    palette: ['#d4af37', '#fff', '#ffd700'],
+                    targetY: this.height * 0.20,
+                    speed: 18,
+                    friction: 0.995,
+                    color: '#ffd700',
+                    palette: ['#ffd700', '#ff4500', '#ffcc00', '#ff6347', '#ffa500'],
                     isText: true
                 });
             }
@@ -1091,20 +1094,22 @@
                 if (isText) {
                     const points = this.textPoints;
                     for (let i = 0; i < points.length; i++) {
-                        if (Math.random() > 0.4) continue;
+                        if (Math.random() > 0.5) continue; // Slightly more particles for better shape
                         const p = points[i];
+                        const angle = Math.random() * Math.PI * 2;
+                        const burst = 2 + Math.random() * 3;
                         this.particles.push({
                             x: x,
                             y: y,
-                            vx: (p.x - x) * 0.08,
-                            vy: (p.y - y) * 0.08,
+                            vx: Math.cos(angle) * burst * (Math.random() * 3), // More chaotic initial burst
+                            vy: Math.sin(angle) * burst * (Math.random() * 3),
                             targetX: p.x,
                             targetY: p.y,
                             color: palette[Math.floor(Math.random() * palette.length)],
                             alpha: 1,
-                            decay: 0.01 + Math.random() * 0.01,
                             isText: true,
-                            life: 0
+                            life: 0,
+                            maxLife: 200 // Longer life
                         });
                     }
                 } else {
@@ -1132,7 +1137,7 @@
                 for (let i = this.rockets.length - 1; i >= 0; i--) {
                     const r = this.rockets[i];
                     r.y -= r.speed;
-                    r.speed *= 0.98;
+                    r.speed *= (r.friction || 0.98);
 
                     if (r.y <= r.targetY || r.speed < 1) {
                         this.explode(r.x, r.y, r.palette, r.isText);
@@ -1144,12 +1149,33 @@
                     const p = this.particles[i];
 
                     if (p.isText) {
+                        // Physics-based assembly
+                        const dx = p.targetX - p.x;
+                        const dy = p.targetY - p.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        // Attraction force (stronger when close)
+                        const force = dist * 0.08;
+                        const angle = Math.atan2(dy, dx);
+
+                        p.vx += Math.cos(angle) * force * 0.05;
+                        p.vy += Math.sin(angle) * force * 0.05;
+
+                        // Friction
+                        p.vx *= 0.85;
+                        p.vy *= 0.85;
+
+                        p.x += p.vx;
+                        p.y += p.vy;
+
+                        // Jitter/Sparkle movement
+                        p.x += (Math.random() - 0.5) * 0.5;
+                        p.y += (Math.random() - 0.5) * 0.5;
+
+                        // Life management
                         p.life++;
-                        if (p.life < 20) {
-                            p.x += p.vx;
-                            p.y += p.vy;
-                        } else {
-                            if (p.life > 100) p.alpha -= 0.02;
+                        if (p.life > 180) { // Longer life
+                            p.alpha -= 0.01;
                         }
                     } else {
                         p.x += p.vx;
@@ -1180,9 +1206,14 @@
 
                 for (let p of this.particles) {
                     this.ctx.fillStyle = p.color;
-                    this.ctx.globalAlpha = p.alpha;
+                    // Sparkle effect
+                    if (p.isText && p.life > 20) {
+                        this.ctx.globalAlpha = p.alpha * (0.6 + Math.random() * 0.4);
+                    } else {
+                        this.ctx.globalAlpha = p.alpha;
+                    }
                     this.ctx.beginPath();
-                    this.ctx.arc(p.x, p.y, p.isText ? 1.5 : 2, 0, Math.PI * 2);
+                    this.ctx.arc(p.x, p.y, p.isText ? 2 : 2, 0, Math.PI * 2);
                     this.ctx.fill();
                 }
 
@@ -1618,7 +1649,9 @@
                         if (fireworkRef.current) {
                             fireworkRef.current.width = window.innerWidth;
                             fireworkRef.current.height = window.innerHeight;
-                            fireworkRef.current.textPoints = fireworkRef.current.getTextPoints('2026', window.innerWidth / 2, window.innerHeight * 0.35, Math.min(window.innerWidth * 0.22, 220));
+                            const isMobile = window.innerWidth < 768;
+                            const textSize = isMobile ? Math.min(window.innerWidth * 0.40, 180) : Math.min(window.innerWidth * 0.22, 220);
+                            fireworkRef.current.textPoints = fireworkRef.current.getTextPoints('2026', window.innerWidth / 2, window.innerHeight * 0.20, textSize);
                         }
                     }
                 };
@@ -1689,17 +1722,19 @@
                             <section className="min-h-screen flex flex-col justify-center items-center text-center px-5 py-20 relative">
 
                                 <div className="relative z-10">
-                                    <h1 className="mb-8">
+                                    <h1 className="mb-8 opacity-0 animate-[slideUp_1s_ease-out_forwards]">
                                         <span className="font-quicksand text-base md:text-xl font-light tracking-[0.4em] text-gold-light/60 block mb-4 uppercase">The Journey Of</span>
                                         <span className="font-playfair text-6xl md:text-9xl font-bold gradient-text lowercase neon-glow">dnp</span>
                                     </h1>
-                                    <p className="font-caveat text-2xl md:text-4xl text-gold-light/80 mb-16 flex items-center justify-center gap-3">
+                                    <p className="font-caveat text-2xl md:text-4xl text-gold-light/80 mb-16 flex items-center justify-center gap-3 opacity-0 animate-[slideUp_1s_ease-out_0.3s_forwards]">
                                         <i className="ph ph-infinity"></i>
                                         <span>Endless Memories</span>
                                         <i className="ph ph-sparkle"></i>
                                     </p>
-                                    <Counter />
-                                    <p className="font-quicksand text-lg md:text-xl text-paper/60 italic mt-8">"Every second with you is my favorite."</p>
+                                    <div className="opacity-0 animate-[slideUp_1s_ease-out_0.6s_forwards]">
+                                        <Counter />
+                                    </div>
+                                    <p className="font-quicksand text-lg md:text-xl text-paper/60 italic mt-8 opacity-0 animate-[slideUp_1s_ease-out_0.9s_forwards]">"Every second with you is my favorite."</p>
                                 </div>
 
                                 <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
@@ -1709,9 +1744,9 @@
 
                             <section className="min-h-screen py-24 px-5 relative">
                                 <div className="text-center mb-16">
-                                    <span className="font-quicksand text-base md:text-lg uppercase tracking-[0.3em] text-gold/50 block mb-4">Gallery</span>
-                                    <h2 className="font-playfair text-4xl md:text-6xl font-bold gradient-text mb-4">Timeless Frames</h2>
-                                    <p className="font-caveat text-2xl md:text-3xl text-gold-light/60">Where time stands still just for us.</p>
+                                    <span className="font-quicksand text-base md:text-lg uppercase tracking-[0.3em] text-gold/50 block mb-4 opacity-0 animate-[slideUp_1s_ease-out_forwards] [animation-timeline:view()] [animation-range:entry_20%_cover_30%]">Gallery</span>
+                                    <h2 className="font-playfair text-4xl md:text-6xl font-bold gradient-text mb-4 opacity-0 animate-[slideUp_1s_ease-out_0.2s_forwards] [animation-timeline:view()] [animation-range:entry_20%_cover_30%]">Timeless Frames</h2>
+                                    <p className="font-caveat text-2xl md:text-3xl text-gold-light/60 opacity-0 animate-[slideUp_1s_ease-out_0.4s_forwards] [animation-timeline:view()] [animation-range:entry_20%_cover_30%]">Where time stands still just for us.</p>
                                 </div>
                                 <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-2 px-4 auto-rows-[minmax(100px,auto)] grid-flow-dense">
                                     {photos.map((photo, i) => <PhotoCard key={i} photo={photo} index={i} />)}
