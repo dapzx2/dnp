@@ -1352,7 +1352,14 @@
 
             const handleSeek = (e) => {
                 const rect = progressBarRef.current.getBoundingClientRect();
-                const clickX = e.clientX - rect.left;
+                let clientX;
+                if (e.touches && e.touches.length > 0) {
+                    clientX = e.touches[0].clientX;
+                } else {
+                    clientX = e.clientX;
+                }
+
+                const clickX = clientX - rect.left;
                 const width = rect.width;
                 const seekTime = (clickX / width) * audioRef.current.duration;
                 audioRef.current.currentTime = Math.max(0, Math.min(seekTime, audioRef.current.duration));
@@ -1452,6 +1459,8 @@
                                         ref={progressBarRef}
                                         className="w-full h-1.5 bg-white/10 rounded-full cursor-pointer overflow-hidden"
                                         onClick={handleSeek}
+                                        onTouchStart={handleSeek}
+                                        onTouchMove={handleSeek}
                                         onMouseMove={handleSliderHover}
                                         onMouseLeave={handleSliderLeave}
                                     >
