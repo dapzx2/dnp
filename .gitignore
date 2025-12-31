@@ -2,7 +2,7 @@ extract_metadata.py
 metadata_output.json
 script.js
 styles.css
-index.html
+
 *.pyc
 __pycache__
 .DS_Store
