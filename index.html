@@ -127,7 +127,10 @@
         }
     </script>
     <style>
+        html,
         body {
+            overflow-x: hidden;
+            width: 100%;
             background: linear-gradient(135deg, #0a0f14 0%, #0f2027 50%, #1a1a2e 100%);
         }
 
@@ -431,7 +434,7 @@
     </style>
 </head>
 
-<body class="font-inter text-paper overflow-x-hidden">
+<body class="font-inter text-paper overflow-x-hidden w-full">
     <div id="root"></div>
 
     <script type="text/babel">
@@ -465,16 +468,29 @@
 
         const letterParagraphs = [
             'hayyieee sayangg :3',
-            'rasanya.. baru kemarin ajaa yaa kita mulai cerita inii.. aku tidaa bisaa bayangkan gimana yahh hidup aku tanpa kamu ueueueu :<',
-            "kalau sama kamu tuh waktu cepat banget berlaluu ^^",
-            'tapi anehnya gara-gara kamu juga nihh.. hari yang biasanya bosan banget sekarang jadi seru.. aku jadi semangat bangun pagi cuma buat cepet-cepet balas chat selamat pagi dari kamu tauu!!',
-            'kamu selalu jadi alasan buat aku senyumm :> bahkan di hari yang paling melelahkan sekalipun... you brought so much light into my world sayangg!!',
+            'tidaa terasa sudah 2026 aja niehh..',
+            'padahal rasanya baru kemarin ajaa yaa kita mulai cerita inii..',
+            'aku tidaa bisaa bayangkan gimana yahh hidup aku tanpa kamu ueueueu..',
+            "kalau sama kamu tuh waktu cepat banget berlaluu :<",
+            'tapi anehnya gara-gara kamu juga nihh.. hari yang biasanya bosan banget sekarang jadi seru abiezz..',
+            'aku jadi semangatt bangun pagii cuma buat cepet-cepet balas chat selamat pagii dari kamu!!',
+            'kamu selalu jadi alasan buat aku senyumm :> bahkan waktu di hari yang paling buat aku capee sekalipun..',
+            'you brought so much light into my world sayangg!!',
             'aku mau bilang makasih banyakkk ^^',
             'thanks for sticking with me through my best and my worst..',
-            'yess aku tau aku tidaa selalu gampang dimengerti.. kadang-kadang atau bahkan malahh sering yapp 😭 pas aku nyebelin atau egois... yahh aku taw siee pasti sering yahh.. tapi kamu tetep ada buat akuu :> sabar menghadapi sifat aku yang ga baik dan kamu tidaa pernah lelahh support aku ueueue :< your patience and kindness mean the world to me...',
-            'aku maww kita tumbuhh samaa-samaa, belajar dewasa sama-sama, dan melewati semua fase hidup ini berduaa ^^ aku sih tidaaa peduli sesusah apa tantangan di depan nanti.. asalkan sama kamu 😋 aku yakin kita pasti bisa lewatin semuanya :> because with you, everything feels possible...',
-            'tetap jadi putri yang ceria, baik hati, dan ngangenin kayak gini terus ya ^^ i love you more than any words can explain, today, tomorrow, and forever...!!',
-            'davaa sayangg putriii banyaa banyaa.. ^^',
+            'yess aku tau aku tidaa selalu gampang dimengerti..',
+            'kadang-kadang atau.. bahkan malahh sering yapp 😭 pas aku nyebelin atau egois..',
+            'yahh aku taw siee pasti sering yahh.. tapi kamu tetep ada buat akuu :>',
+            'sabar menghadapi sifat aku yang tidaa baik.. dan kamu tidaa pernah lelahh support aku ueueue :<',
+            'your patience and kindness mean the world to me...',
+            'aku maww kita tumbuhh samaa-samaa, belajar dewasa sama-sama, dan melewati semua fase hidup ini berduaa ^^',
+            'aku sih tidaaa peduli sesusah apa tantangan di depan nanti..',
+            'asalkan sama kamu 😋 aku yakin kita pasti bisa lewatin semuanya :>',
+            ' because with you, everything feels possible..',
+            'mff so yeping panjang kali lebarr 😭',
+            'tetap jadi putri yang ceria, baik hati, dan ngangenin kayak gini terus ya ^^',
+            'i love you more than any words can explain, today, tomorrow, and forever...!!',
+            'davaa sayangg putriii banyaa banyaa ^^',
             'mwahh mwahh mwahhh 😘💕',
         ];
 
@@ -500,15 +516,15 @@
             }, []);
 
             useEffect(() => {
-                const handleMouseMove = (e) => {
+                const updateParticles = (x, y) => {
                     particleRefs.current.forEach((el, i) => {
                         if (!el) return;
                         const rect = el.getBoundingClientRect();
                         const centerX = rect.left + rect.width / 2;
                         const centerY = rect.top + rect.height / 2;
 
-                        const dx = e.clientX - centerX;
-                        const dy = e.clientY - centerY;
+                        const dx = x - centerX;
+                        const dy = y - centerY;
                         const dist = Math.sqrt(dx * dx + dy * dy);
 
                         const radius = 150;
@@ -527,8 +543,20 @@
                     });
                 };
 
+                const handleMouseMove = (e) => updateParticles(e.clientX, e.clientY);
+
+                const handleTouchMove = (e) => {
+                    const touch = e.touches[0];
+                    updateParticles(touch.clientX, touch.clientY);
+                };
+
                 window.addEventListener('mousemove', handleMouseMove);
-                return () => window.removeEventListener('mousemove', handleMouseMove);
+                window.addEventListener('touchmove', handleTouchMove, { passive: true }); // passive true to allow scrolling
+
+                return () => {
+                    window.removeEventListener('mousemove', handleMouseMove);
+                    window.removeEventListener('touchmove', handleTouchMove);
+                };
             }, []);
 
             return (
@@ -681,11 +709,11 @@
             );
         }
         const TimeItem = ({ value, label }) => (
-            <div className="glass rounded-xl p-3 md:p-5 text-center min-w-[60px] md:min-w-[90px] hover:scale-105 transition-transform duration-300">
-                <span className="font-courier text-2xl md:text-4xl lg:text-5xl font-bold gradient-text block leading-none">
+            <div className="glass rounded-lg md:rounded-xl p-2 md:p-5 text-center min-w-[50px] md:min-w-[90px] hover:scale-105 transition-transform duration-300 flex-shrink-0">
+                <span className="font-courier text-xl md:text-4xl lg:text-5xl font-bold gradient-text block leading-none">
                     {String(value).padStart(2, '0')}
                 </span>
-                <span className="font-quicksand text-sm md:text-base text-gold-light/70 uppercase tracking-wider mt-1 block">{label}</span>
+                <span className="font-quicksand text-xs md:text-base text-gold-light/70 uppercase tracking-wider mt-1 block">{label}</span>
             </div>
         );
 
@@ -711,18 +739,18 @@
 
 
             return (
-                <div className="flex flex-col items-center gap-4 mb-10">
+                <div className="flex flex-col items-center gap-4 mb-10 w-full max-w-full px-2">
                     <div className="flex items-center gap-2 text-gold/60">
                         <i className="ph ph-clock text-xl animate-pulse"></i>
                         <span className="font-quicksand text-base md:text-lg uppercase tracking-widest">Time Together</span>
                     </div>
-                    <div className="flex items-center gap-2 md:gap-4">
+                    <div className="flex items-center justify-center gap-1 md:gap-4 w-full max-w-full">
                         <TimeItem value={time.days} label="Days" />
-                        <span className="font-courier text-2xl md:text-4xl text-gold/30 animate-pulse">:</span>
+                        <span className="font-courier text-lg md:text-4xl text-gold/30 animate-pulse">:</span>
                         <TimeItem value={time.hours} label="Hours" />
-                        <span className="font-courier text-2xl md:text-4xl text-gold/30 animate-pulse">:</span>
+                        <span className="font-courier text-lg md:text-4xl text-gold/30 animate-pulse">:</span>
                         <TimeItem value={time.minutes} label="Mins" />
-                        <span className="font-courier text-2xl md:text-4xl text-gold/30 animate-pulse">:</span>
+                        <span className="font-courier text-lg md:text-4xl text-gold/30 animate-pulse">:</span>
                         <TimeItem value={time.seconds} label="Secs" />
                     </div>
                 </div>
@@ -748,6 +776,29 @@
             );
         }
 
+        const calculateDuration = (text) => {
+            let duration = 0;
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                const nextChar = text[i + 1];
+
+                if (char === '.' || char === '?' || char === '!' || char === ',') {
+                    if (nextChar === '.' || nextChar === '?' || nextChar === '!' || nextChar === ',') {
+                        duration += 50;
+                    } else {
+                        if (char === ',') {
+                            duration += 400;
+                        } else {
+                            duration += 800;
+                        }
+                    }
+                } else {
+                    duration += 50;
+                }
+            }
+            return duration;
+        };
+
         function TypewriterParagraph({ text, delay, onComplete }) {
             const [displayText, setDisplayText] = useState('');
             const [started, setStarted] = useState(false);
@@ -764,20 +815,39 @@
                 if (!started) return;
 
                 let currentIndex = 0;
-                const typeSpeed = 25;
+                let timeoutId;
 
-                const interval = setInterval(() => {
+                const typeChar = () => {
                     if (currentIndex < text.length) {
                         setDisplayText(text.slice(0, currentIndex + 1));
+
+                        const char = text[currentIndex];
+                        const nextChar = text[currentIndex + 1];
+                        let nextDelay = 50;
+
+                        if (char === '.' || char === '?' || char === '!' || char === ',') {
+                            if (nextChar === '.' || nextChar === '?' || nextChar === '!' || nextChar === ',') {
+                                nextDelay = 50;
+                            } else {
+                                if (char === ',') {
+                                    nextDelay = 400;
+                                } else {
+                                    nextDelay = 800;
+                                }
+                            }
+                        }
+
                         currentIndex++;
+                        timeoutId = setTimeout(typeChar, nextDelay);
                     } else {
                         setIsComplete(true);
-                        clearInterval(interval);
                         if (onComplete) onComplete();
                     }
-                }, typeSpeed);
+                };
 
-                return () => clearInterval(interval);
+                typeChar();
+
+                return () => clearTimeout(timeoutId);
             }, [started, text]);
 
             return (
@@ -883,7 +953,7 @@
                     {/* The Actual Letter - Expands when open */}
                     {isOpen && (
                         <div className="w-full max-w-3xl animate-scale-in origin-center">
-                            <div className="relative paper-texture p-8 md:p-16 my-0 transform rotate-1 transition-transform hover:rotate-0 duration-500 shadow-2xl">
+                            <div className="relative paper-texture p-5 md:p-16 my-0 transform rotate-1 transition-transform hover:rotate-0 duration-500 shadow-2xl">
                                 <div className="paper-clip"></div>
 
                                 <div className="absolute -top-6 left-1/2 -translate-x-1/2 z-30">
@@ -892,30 +962,43 @@
                                     </div>
                                 </div>
 
-                                <div className="text-center mb-10 mt-8 animate-fade-in">
-                                    <h2 className="font-playfair text-3xl md:text-5xl text-midnight-dark/90 font-bold decoration-gold/30 decoration-wavy underline underline-offset-8">"For You"</h2>
+                                <div className="text-center mb-10 md:mb-20 mt-8 animate-fade-in">
+                                    <h2 className="font-playfair text-xl md:text-5xl text-midnight-dark/90 font-bold decoration-gold/30 decoration-wavy underline underline-offset-8">"untuk si imutt ^^"</h2>
                                 </div>
 
-                                <div className="font-courier text-lg md:text-xl leading-relaxed text-midnight-dark/80 whitespace-pre-line min-h-[300px]">
+                                <div className="font-courier text-xs md:text-xl leading-relaxed text-midnight-dark/80 whitespace-pre-line min-h-[300px] text-left">
                                     {/* Optimized delay calculation */}
                                     {(() => {
                                         let cumulativeDelay = 500;
                                         return letterParagraphs.map((p, i) => {
                                             const delay = cumulativeDelay;
-                                            cumulativeDelay += (p.length * 25) + 400; // Char time + pause
+                                            cumulativeDelay += calculateDuration(p) + 500; // Text duration + pause
                                             return <TypewriterParagraph key={i} text={p} delay={delay} />;
                                         });
                                     })()}
                                 </div>
 
-                                <div className="text-right mt-12 font-caveat text-3xl md:text-4xl text-midnight-dark transition-opacity duration-1000"
-                                    style={{
-                                        opacity: 0,
-                                        animation: `fadeIn 1s ease-out forwards`,
-                                        animationDelay: `${letterParagraphs.reduce((acc, str) => acc + (str.length * 25) + 400, 500) + 500}ms`
-                                    }}>
-                                    Forever Yours..<br /><br />
-                                    <span className="text-4xl md:text-5xl text-gold-dim font-bold">Dava ^^</span>
+                                <div className="text-right mt-12 font-caveat text-midnight-dark">
+                                    <div
+                                        className="text-3xl md:text-4xl transition-opacity duration-1000"
+                                        style={{
+                                            opacity: 0,
+                                            animation: `fadeIn 1s ease-out forwards`,
+                                            animationDelay: `${letterParagraphs.reduce((acc, str) => acc + calculateDuration(str) + 500, 500) + 500}ms`
+                                        }}
+                                    >
+                                        Forever Yours..
+                                    </div>
+                                    <div
+                                        className="text-4xl md:text-5xl text-gold-dim font-bold mt-2 transition-opacity duration-1000"
+                                        style={{
+                                            opacity: 0,
+                                            animation: `fadeIn 1s ease-out forwards`,
+                                            animationDelay: `${letterParagraphs.reduce((acc, str) => acc + calculateDuration(str) + 500, 500) + 1500}ms`
+                                        }}
+                                    >
+                                        Dava ^^
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -924,7 +1007,6 @@
             );
         }
 
-        // Fireworks Class - "Smart & Beautiful" Optimization
         class Firework {
             constructor(canvas, ctx, width, height) {
                 this.canvas = canvas;
@@ -933,17 +1015,15 @@
                 this.height = height;
                 this.particles = [];
                 this.rockets = [];
-                // Pre-calculate text points ONCE
                 this.textPoints = this.getTextPoints('2026', width / 2, height * 0.35, Math.min(width * 0.22, 220));
 
-                // Aesthetic Palettes
                 this.palettes = [
-                    ['#ff0040', '#ff0080', '#ff00bf', '#ff00ff'], // Neon Pink
-                    ['#00ffff', '#00bfff', '#0080ff', '#0040ff'], // Electric Blue
-                    ['#ffbf00', '#ff8000', '#ff4000', '#ff0000'], // Fiery
-                    ['#bfff00', '#80ff00', '#40ff00', '#00ff00'], // Toxic Green
-                    ['#d4af37', '#fdfbd4', '#f0e68c', '#ffd700'], // Classic Gold
-                    ['#e0c3fc', '#8ec5fc', '#c3e0fc', '#fce3fc'], // Pastel Dream
+                    ['#ff0040', '#ff0080', '#ff00bf', '#ff00ff'],
+                    ['#00ffff', '#00bfff', '#0080ff', '#0040ff'],
+                    ['#ffbf00', '#ff8000', '#ff4000', '#ff0000'],
+                    ['#bfff00', '#80ff00', '#40ff00', '#00ff00'],
+                    ['#d4af37', '#fdfbd4', '#f0e68c', '#ffd700'],
+                    ['#e0c3fc', '#8ec5fc', '#c3e0fc', '#fce3fc'],
                 ];
             }
 
@@ -965,8 +1045,6 @@
 
                 const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
                 const points = [];
-                // Optimized sampling density
-                // Mobile needs higher density (lower number) to form clear text at small sizes
                 const isMobile = this.width < 768;
                 const density = isMobile ? 2 : 4;
 
@@ -982,7 +1060,7 @@
             }
 
             createRocket() {
-                if (this.rockets.length > 3) return; // Limit concurrent rockets
+                if (this.rockets.length > 3) return;
                 const palette = this.palettes[Math.floor(Math.random() * this.palettes.length)];
 
                 this.rockets.push({
@@ -1008,19 +1086,17 @@
             }
 
             explode(x, y, palette, isText) {
-                if (this.particles.length > 1500) return; // Hard cap
+                if (this.particles.length > 1500) return;
 
                 if (isText) {
-                    // Explode into text shape
                     const points = this.textPoints;
-                    // Randomly sample points to prevent overcrowding
                     for (let i = 0; i < points.length; i++) {
-                        if (Math.random() > 0.4) continue; // Skip 40% of points for performance
+                        if (Math.random() > 0.4) continue;
                         const p = points[i];
                         this.particles.push({
                             x: x,
                             y: y,
-                            vx: (p.x - x) * 0.08, // Lerp speed
+                            vx: (p.x - x) * 0.08,
                             vy: (p.y - y) * 0.08,
                             targetX: p.x,
                             targetY: p.y,
@@ -1032,13 +1108,11 @@
                         });
                     }
                 } else {
-                    // Regular explosion
                     const count = 50 + Math.random() * 30;
                     const type = Math.random();
 
                     for (let i = 0; i < count; i++) {
                         const angle = Math.random() * Math.PI * 2;
-                        // Varied speed for depth
                         const speed = Math.random() * 5 + 2;
 
                         this.particles.push({
@@ -1055,11 +1129,9 @@
             }
 
             update() {
-                // Rockets
                 for (let i = this.rockets.length - 1; i >= 0; i--) {
                     const r = this.rockets[i];
                     r.y -= r.speed;
-                    // Ease out speed
                     r.speed *= 0.98;
 
                     if (r.y <= r.targetY || r.speed < 1) {
@@ -1068,7 +1140,6 @@
                     }
                 }
 
-                // Particles
                 for (let i = this.particles.length - 1; i >= 0; i--) {
                     const p = this.particles[i];
 
@@ -1084,7 +1155,7 @@
                         p.x += p.vx;
                         p.y += p.vy;
                         p.vy += p.gravity || 0;
-                        p.vx *= 0.96; // Air resistance
+                        p.vx *= 0.96;
                         p.vy *= 0.96;
                         p.alpha -= p.decay;
                     }
@@ -1094,18 +1165,12 @@
             }
 
             draw() {
-                // THE SECRET SAUCE: Trail Effect
-                // Instead of clearing, draw a semi-transparent black rectangle
-                // This creates distinct trails without computing them manually!
-                // Use destination-out to fade trails to transparent, revealing the CSS background
                 this.ctx.globalCompositeOperation = 'destination-out';
-                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; // Adjust alpha for trail length
+                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
                 this.ctx.fillRect(0, 0, this.width, this.height);
 
-                // Enable additive blending for cheap GLOW effect
                 this.ctx.globalCompositeOperation = 'lighter';
 
-                // Draw Rockets
                 for (let r of this.rockets) {
                     this.ctx.fillStyle = r.color;
                     this.ctx.beginPath();
@@ -1113,13 +1178,10 @@
                     this.ctx.fill();
                 }
 
-                // Draw Particles - Single loop, minimal logic
                 for (let p of this.particles) {
                     this.ctx.fillStyle = p.color;
                     this.ctx.globalAlpha = p.alpha;
                     this.ctx.beginPath();
-                    // Small rectifier for speed (fillRect is faster than arc for 1x1 or 2x2 particles)
-                    // But arc looks better. Let's stick to small arc.
                     this.ctx.arc(p.x, p.y, p.isText ? 1.5 : 2, 0, Math.PI * 2);
                     this.ctx.fill();
                 }
@@ -1129,9 +1191,6 @@
             }
         }
 
-        // Music Player Component
-        // function MusicPlayer() { <-- Removed incorrect wrapper
-        // Global Data & Helpers
         const playlistData = [
             {
                 "src": "audio/Anything You Want - Reality Club.mp3",
@@ -1172,9 +1231,7 @@
             return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
         };
 
-        // Music Player Component
         function MusicPlayer() {
-            // Data extracted via python script for reliability
             const [songs] = useState(playlistData);
             const [currentSongIndex, setCurrentSongIndex] = useState(0);
             const [isPlaying, setIsPlaying] = useState(false);
@@ -1195,7 +1252,6 @@
                 }, 200);
             };
 
-            // Autoplay on mount with fallback
             useEffect(() => {
                 const playAudio = async () => {
                     if (audioRef.current) {
@@ -1203,21 +1259,16 @@
                             await audioRef.current.play();
                             setIsPlaying(true);
                         } catch (err) {
-                            console.log('Autoplay blocked, waiting for user gesture...');
-                            // Fallback: Play on first valid user gesture
                             const handleInteraction = async () => {
                                 try {
                                     await audioRef.current.play();
                                     setIsPlaying(true);
-                                    // Remove all listeners after successful play
                                     document.removeEventListener('click', handleInteraction);
                                     document.removeEventListener('keydown', handleInteraction);
                                     document.removeEventListener('touchstart', handleInteraction);
                                 } catch (e) {
-                                    console.log('Play attempt failed:', e);
                                 }
                             };
-                            // Only use events that count as user gestures
                             document.addEventListener('click', handleInteraction);
                             document.addEventListener('keydown', handleInteraction);
                             document.addEventListener('touchstart', handleInteraction);
@@ -1225,7 +1276,6 @@
                     }
                 };
 
-                // Small delay to ensure audio element is ready
                 const timer = setTimeout(playAudio, 500);
                 return () => clearTimeout(timer);
             }, []);
@@ -1337,7 +1387,7 @@
 
                     {/* Expanded Player Panel */}
                     {isExpanded && (
-                        <div className={`bg-black/90 backdrop-blur-xl rounded-3xl overflow-hidden shadow-2xl border border-gold/30 w-80 md:w-96 origin-bottom-right ${isClosing ? 'animate-scale-out' : 'animate-scale-in'}`}>
+                        <div className={`bg-black/90 backdrop-blur-xl rounded-3xl overflow-hidden shadow-2xl border border-gold/30 w-80 md:w-96 max-w-[calc(100vw-2rem)] origin-bottom-right ${isClosing ? 'animate-scale-out' : 'animate-scale-in'}`}>
                             {/* Header with close button */}
                             <div className="flex items-center justify-between p-4 border-b border-white/10">
                                 <div className="flex items-center gap-2">
@@ -1475,7 +1525,6 @@
 
 
 
-        // Main App
         function App() {
             const [page, setPage] = useState('main');
             const [fireworksVisible, setFireworksVisible] = useState(false);
@@ -1507,7 +1556,6 @@
                 if (page !== 'fireworks' || !canvasRef.current) return;
                 const canvas = canvasRef.current;
 
-                // HIGH QUALITY RENDERING (DPR Support)
                 const dpr = window.devicePixelRatio || 1;
                 canvas.width = window.innerWidth * dpr;
                 canvas.height = window.innerHeight * dpr;
@@ -1515,9 +1563,8 @@
                 canvas.style.height = window.innerHeight + 'px';
 
                 const ctx = canvas.getContext('2d');
-                ctx.scale(dpr, dpr); // Scale context logic to match logical pixels
+                ctx.scale(dpr, dpr);
 
-                // Pass logical width/height to Firework class
                 fireworkRef.current = new Firework(canvas, ctx, window.innerWidth, window.innerHeight);
 
                 let animId;
@@ -1551,15 +1598,13 @@
 
                 animate();
 
-                // Launch the special 2026 text firework at start
                 setTimeout(() => {
                     if (fireworkRef.current) fireworkRef.current.createTextRocket();
                 }, 800);
 
                 launch();
-                launchInterval = setInterval(launch, 2000); // Relaxed interval
+                launchInterval = setInterval(launch, 2000);
 
-                // Periodically launch 2026 text firework
                 textInterval = setInterval(() => {
                     if (!isPaused && fireworkRef.current) {
                         fireworkRef.current.createTextRocket();
@@ -1573,7 +1618,6 @@
                         if (fireworkRef.current) {
                             fireworkRef.current.width = window.innerWidth;
                             fireworkRef.current.height = window.innerHeight;
-                            // Pre-calculate text points again on resize
                             fireworkRef.current.textPoints = fireworkRef.current.getTextPoints('2026', window.innerWidth / 2, window.innerHeight * 0.35, Math.min(window.innerWidth * 0.22, 220));
                         }
                     }
@@ -1590,7 +1634,6 @@
                 };
             }, [page]);
 
-            // Initialize spotlight and cursor position to center when spotlight page loads
             useEffect(() => {
                 if (page === 'spotlight') {
                     const centerX = window.innerWidth / 2;
@@ -1618,7 +1661,19 @@
                 }
             };
 
-            // Render music player for all pages
+            const handleTouchMove = (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                if (overlayRef.current) {
+                    overlayRef.current.style.setProperty('--mouse-x', `${touch.clientX}px`);
+                    overlayRef.current.style.setProperty('--mouse-y', `${touch.clientY}px`);
+                }
+                if (cursorRef.current) {
+                    cursorRef.current.style.left = `${touch.clientX}px`;
+                    cursorRef.current.style.top = `${touch.clientY}px`;
+                }
+            };
+
             const showMusicPlayer = true;
 
             return (
@@ -1712,9 +1767,19 @@
                     {/* Spotlight Page */}
                     {page === 'spotlight' && (
                         <section
-                            className="fixed inset-0 z-[2001] flex flex-col justify-start items-center py-10 cursor-none animate-spotlight-page overflow-y-auto"
+                            className="fixed inset-0 z-[2001] flex flex-col justify-start items-center py-10 cursor-none animate-spotlight-page overflow-hidden touch-none"
                             onMouseMove={handleMouseMove}
+                            onTouchMove={handleTouchMove}
                         >
+                            <button
+                                onClick={handleBack}
+                                className="fixed top-6 left-6 font-quicksand text-base px-6 py-2 glass rounded-full hover:bg-gold/10 transition-all duration-300 z-[2005] md:hidden"
+                            >
+                                <span className="flex items-center gap-2 text-gold">
+                                    <i className="ph ph-arrow-left"></i> Back
+                                </span>
+                            </button>
+
                             <div className="relative w-full flex flex-col justify-center items-center text-center px-5 my-auto z-[1]">
                                 <div className="relative mb-8 group cursor-pointer flex justify-center transform transition-transform duration-500 hover:scale-105 hover:rotate-0 -rotate-2">
                                     {/* The Frame Object */}
@@ -1747,18 +1812,14 @@
                                     <br />
                                     mwahh mwahh mwahhh :3
                                 </p>
-
+                                <button onClick={handleBack} className="hidden md:flex font-quicksand text-base px-8 py-3 glass rounded-full hover:bg-gold/10 transition-all duration-300 z-20 mb-10">
+                                    <span className="flex items-center gap-2 text-gold">
+                                        <i className="ph ph-arrow-left"></i> Back to Start
+                                    </span>
+                                </button>
                             </div>
                             <div ref={overlayRef} className="spotlight-overlay fixed inset-0 bg-black pointer-events-none z-10"></div>
-                            <div className="font-caveat text-xl md:text-2xl text-gold/80 my-8 flex items-center gap-3 z-[5]">
-                                <i className="ph ph-flashlight text-2xl animate-wiggle"></i>
-                                <span>Move your mouse to search...</span>
-                            </div>
-                            <button onClick={handleBack} className="font-quicksand text-base px-8 py-3 glass rounded-full hover:bg-gold/10 transition-all duration-300 z-20 mb-10">
-                                <span className="flex items-center gap-2 text-gold">
-                                    <i className="ph ph-arrow-left"></i> Back to Start
-                                </span>
-                            </button>
+
                             <div ref={cursorRef} className="flashlight-cursor fixed w-12 h-12 rounded-full border-2 border-gold pointer-events-none z-[2002] -translate-x-1/2 -translate-y-1/2 shadow-[0_0_30px_rgba(212,175,55,0.5)] hidden md:block"></div>
                         </section>
                     )}
