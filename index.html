@@ -1262,7 +1262,7 @@
             return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
         };
 
-        function MusicPlayer() {
+        const MusicPlayer = React.memo(function MusicPlayer() {
             const [songs] = useState(playlistData);
             const [currentSongIndex, setCurrentSongIndex] = useState(0);
             const [isPlaying, setIsPlaying] = useState(false);
@@ -1285,35 +1285,48 @@
             };
 
             useEffect(() => {
-                const playAudio = async () => {
-                    if (audioRef.current) {
-                        try {
-                            await audioRef.current.play();
-                            setIsPlaying(true);
-                        } catch (err) {
-                            const handleInteraction = async () => {
-                                try {
-                                    await audioRef.current.play();
-                                    setIsPlaying(true);
-                                    document.removeEventListener('click', handleInteraction);
-                                    document.removeEventListener('keydown', handleInteraction);
-                                    document.removeEventListener('touchstart', handleInteraction);
-                                } catch (e) {
-                                }
-                            };
-                            document.addEventListener('click', handleInteraction);
-                            document.addEventListener('keydown', handleInteraction);
-                            document.addEventListener('touchstart', handleInteraction);
-                        }
+                let mounted = true;
+
+                const handleInteraction = async () => {
+                    if (!mounted || !audioRef.current) return;
+                    try {
+                        await audioRef.current.play();
+                        if (mounted) setIsPlaying(true);
+                        // Clean up listeners immediately after success
+                        ['click', 'keydown', 'touchstart'].forEach(evt =>
+                            document.removeEventListener(evt, handleInteraction)
+                        );
+                    } catch (e) {
+                        // Ignore errors if unmounted
                     }
                 };
 
+                const playAudio = async () => {
+                    if (!mounted || !audioRef.current) return;
+                    try {
+                        await audioRef.current.play();
+                        if (mounted) setIsPlaying(true);
+                    } catch (err) {
+                        if (!mounted) return;
+                        // Add listeners only if auto-play fails
+                        ['click', 'keydown', 'touchstart'].forEach(evt =>
+                            document.addEventListener(evt, handleInteraction)
+                        );
+                    }
+                };
+
+                // Small delay to ensure DOM is ready
                 const timer = setTimeout(playAudio, 500);
-                return () => clearTimeout(timer);
+
+                return () => {
+                    mounted = false;
+                    clearTimeout(timer);
+                    // CRITICAL: Always try to clean up listeners on unmount
+                    ['click', 'keydown', 'touchstart'].forEach(evt =>
+                        document.removeEventListener(evt, handleInteraction)
+                    );
+                };
             }, []);
-
-
-
 
             const handlePlayPause = () => {
                 if (isPlaying) {
@@ -1584,7 +1597,7 @@
                     />
                 </div>
             );
-        }
+        });
 
 
 
