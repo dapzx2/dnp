@@ -1080,7 +1080,7 @@
                     x: this.width / 2,
                     y: this.height,
                     targetY: this.height * 0.20,
-                    speed: 18,
+                    speed: 13,
                     friction: 0.995,
                     color: '#ffd700',
                     palette: ['#ffd700', '#ff4500', '#ffcc00', '#ff6347', '#ffa500'],
@@ -1321,6 +1321,14 @@
                 return () => {
                     mounted = false;
                     clearTimeout(timer);
+                    // FORCE PAUSE to prevent ghost audio
+                    if (audioRef.current) {
+                        try {
+                            audioRef.current.pause();
+                        } catch (e) {
+                            // Ignore if already paused or error
+                        }
+                    }
                     // CRITICAL: Always try to clean up listeners on unmount
                     ['click', 'keydown', 'touchstart'].forEach(evt =>
                         document.removeEventListener(evt, handleInteraction)
