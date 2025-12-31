@@ -1602,9 +1602,37 @@
             const overlayRef = useRef(null);
             const cursorRef = useRef(null);
 
+            const [is2026Unlocked, setIs2026Unlocked] = useState(() => {
+                return localStorage.getItem('dnp_2026_unlocked') === 'true';
+            });
+            const [showUnlockModal, setShowUnlockModal] = useState(false);
+            const [unlockPassword, setUnlockPassword] = useState('');
+            const [unlockError, setUnlockError] = useState(false);
+
             const handleUnlock = () => {
                 setPage('fireworks');
                 setTimeout(() => setFireworksVisible(true), 100);
+            };
+
+            const handleUnlockClick = () => {
+                if (is2026Unlocked) {
+                    handleUnlock();
+                } else {
+                    setShowUnlockModal(true);
+                }
+            };
+
+            const handleUnlockSubmit = (e) => {
+                e.preventDefault();
+                if (unlockPassword === '082006') {
+                    localStorage.setItem('dnp_2026_unlocked', 'true');
+                    setIs2026Unlocked(true);
+                    setShowUnlockModal(false);
+                    handleUnlock();
+                } else {
+                    setUnlockError(true);
+                    setTimeout(() => setUnlockError(false), 500);
+                }
             };
 
             const handleContinue = () => {
@@ -1796,12 +1824,47 @@
                                 <LetterInteraction />
                             </section>
 
+                            {/* Unlock 2026 Password Modal */}
+                            {showUnlockModal && (
+                                <div className="fixed inset-0 z-[3000] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4">
+                                    <div className="glass-dark p-8 rounded-2xl w-full max-w-sm animate-scale-in text-center relative">
+                                        <button
+                                            onClick={() => setShowUnlockModal(false)}
+                                            className="absolute top-4 right-4 text-white/40 hover:text-white transition-colors"
+                                        >
+                                            <i className="ph ph-x text-xl"></i>
+                                        </button>
+                                        <div className="mb-6">
+                                            <i className="ph ph-lock-key text-4xl text-gold mb-2"></i>
+                                            <h3 className="font-playfair text-xl text-gold-light">Unlock 2026</h3>
+                                            <p className="font-quicksand text-sm text-white/50">Hint: password surat tadii ^^</p>
+                                        </div>
+                                        <form onSubmit={handleUnlockSubmit} className="flex flex-col gap-4">
+                                            <input
+                                                type="password"
+                                                value={unlockPassword}
+                                                onChange={(e) => setUnlockPassword(e.target.value)}
+                                                placeholder="Passcode"
+                                                className={`w-full bg-black/20 border ${unlockError ? 'border-rose animate-shake' : 'border-gold/30 focus:border-gold'} rounded-lg px-4 py-3 text-center text-gold-light font-courier text-lg outline-none transition-all`}
+                                                autoFocus
+                                            />
+                                            <button
+                                                type="submit"
+                                                className="w-full py-3 rounded-lg bg-gold/20 border border-gold/30 text-gold hover:bg-gold/30 transition-colors font-quicksand text-sm font-semibold"
+                                            >
+                                                Unlock Moment
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            )}
+
                             {/* Ending Section */}
                             <section className="min-h-screen flex justify-center items-center relative">
                                 <div className="absolute inset-0">
                                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gold/5 rounded-full blur-3xl animate-pulse-slow" />
                                 </div>
-                                <button onClick={handleUnlock} className="group relative font-quicksand text-lg md:text-xl px-10 md:px-14 py-4 md:py-5 bg-transparent overflow-hidden rounded-full transition-all duration-500 hover:scale-105">
+                                <button onClick={handleUnlockClick} className="group relative font-quicksand text-lg md:text-xl px-10 md:px-14 py-4 md:py-5 bg-transparent overflow-hidden rounded-full transition-all duration-500 hover:scale-105">
                                     <div className="absolute inset-0 bg-gradient-to-r from-gold via-rose to-violet opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full" />
                                     <div className="absolute inset-[2px] bg-midnight-dark rounded-full" />
                                     <span className="relative flex items-center gap-3 text-gold group-hover:text-gold-light transition-colors">
